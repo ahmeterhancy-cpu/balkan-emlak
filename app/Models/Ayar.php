@@ -22,6 +22,8 @@ class Ayar extends Model
 
     private const ONBELLEK = 'balkan_ayarlar';
 
+    private const BELLEK = 'balkan.ayarlar';
+
     /** JSON olarak saklanan anahtarlar. */
     private const JSON = ['iletisim_kisileri'];
 
@@ -60,6 +62,11 @@ class Ayar extends Model
 
     public static function tumu(): array
     {
+        // İstek başına bellek: kapsayıcıda tutulur, testlerde her uygulama örneğiyle sıfırlanır
+        if (app()->bound(self::BELLEK)) {
+            return app(self::BELLEK);
+        }
+
         try {
             $kayitli = Cache::rememberForever(self::ONBELLEK, fn () => static::query()->pluck('deger', 'anahtar')->all());
         } catch (Throwable) {
@@ -75,6 +82,8 @@ class Ayar extends Model
                 ? (json_decode((string) $deger, true) ?: [])
                 : $deger;
         }
+
+        app()->instance(self::BELLEK, $sonuc);
 
         return $sonuc;
     }
@@ -102,11 +111,12 @@ class Ayar extends Model
             static::updateOrCreate(['anahtar' => $anahtar], ['deger' => $deger === null ? null : (string) $deger]);
         }
 
-        Cache::forget(self::ONBELLEK);
+        static::onbellegiTemizle();
     }
 
     public static function onbellegiTemizle(): void
     {
         Cache::forget(self::ONBELLEK);
+        app()->forgetInstance(self::BELLEK);
     }
 }
