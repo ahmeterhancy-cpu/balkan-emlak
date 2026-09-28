@@ -1,6 +1,6 @@
 # Balkan Emlak ve Yönetim — Durum
 
-Son güncelleme: 2026-09-28 · **130 test** (33 vitrin + 44 panel + 33 site finansı + 20 site paneli) yeşil
+Son güncelleme: 2026-09-28 · **136 test** (33 vitrin + 44 panel + 33 site finansı + 20 site paneli + 6 yedek) yeşil
 Şartname: `balkan-emlak-ve-yonetim-proje.md` (kullanıcıdan). Canlıya çıkılmadı, uzak depo yok.
 
 ## Yerel çalıştırma
@@ -80,6 +80,14 @@ kendi aralarında vade sırasıyla kapanır; üst çubukta kalıcı "aktif site"
 gecikme bedeli kapalı (şartname 8.2 — ayrıca kapsamlandırılacak); sakin portalı, çevrimiçi ödeme, banka
 entegrasyonu faz 3.
 
+## Yedekleme (şartname 15, 17)
+
+`balkan:yedek` (her gece 03.15), `balkan:yedek-dogrula` (her pazar), `balkan:geri-yukle`. Tek AES-256 zip:
+veritabanı (tablo tablo JSONL) + özel belgeler + medya + manifest (satır sayıları, mali kontrol toplamları,
+dosya sha1). Doğrulama yedeği boş geçici bir SQLite veritabanına göçlerle kurup yükler ve karşılaştırır — canlıya
+dokunmaz. Geri yükleme önce doğrular, güvenlik yedeği alır, tek transaction'da yükler. Yerelde 10,7 MB'lık
+gerçek yedek alınıp doğrulandı. Sunucu dışına kopyalama işletmenin yedek düzenine kalır (DEPLOY.md).
+
 ## İki aşamalı doğrulama
 
 **Kullanıcı kararıyla yapılmadı (2026-09-28).** Şartname 15 yönetici hesaplarında çok faktörlü doğrulama
@@ -111,5 +119,4 @@ Boş ayar sitede **hiç çizilmez**; yer tutucu metin yayımlanmaz.
 
 2. E-posta: `MAIL_*` boş; başvuru bildirimi ancak Site Ayarları → bildirim e-postası + SMTP girilince gider.
 4. Canlı kurulum paketi (cPanel: `public/build` depoya, `vendor` no-dev, InnoDB, `filament:assets`) hazırlanmadı.
-5. Yedekleme ve geri yükleme denemesi yapılmadı.
 6. Dosya yüklemede zararlı dosya taraması yok (tür/boyut kontrolü var).

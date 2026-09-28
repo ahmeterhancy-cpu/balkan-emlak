@@ -14,7 +14,7 @@ ile açılırsa site boş alanları **göstermez** (yer tutucu yayımlanmaz), am
 
 - PHP ≥ 8.3: `pdo_mysql`, `mbstring` (Turhost'ta kapalı olabiliyor — açtırın), `intl`, `gd`, `fileinfo`, `zip`
 - MySQL 8 / MariaDB 10.5+, **InnoDB** (config varsayılanı `DB_ENGINE=InnoDB ROW_FORMAT=DYNAMIC`)
-- Cron: her dakika `php artisan schedule:run` (şimdilik zamanlanmış iş yok; ileride bildirim/rapor için)
+- Cron: her dakika `php artisan schedule:run` — **zorunlu**: her gece 03.15 şifreli yedek, her pazar yedek doğrulaması
 
 ## 2. Yerelde paket hazırlığı (sunucuda composer/Node yoksa)
 
@@ -54,6 +54,8 @@ DB_PASSWORD=...
 SESSION_DRIVER=database
 SESSION_SECURE_COOKIE=true
 CACHE_STORE=database
+YEDEK_PAROLA=...                # uzun, rastgele; APP_KEY'den ayrı, sunucu dışında da saklayın
+YEDEK_SAKLA=14
 MAIL_MAILER=smtp
 MAIL_HOST=... MAIL_PORT=587 MAIL_USERNAME=... MAIL_PASSWORD=... MAIL_FROM_ADDRESS=...
 ```
@@ -82,9 +84,20 @@ Tohumdaki `*.test` hesapları canlıda rastgele parolayla oluşur; kullanılmaya
 - [ ] İlan fotoğrafı yükle → sitede görünüyor (medya diski yazılabilir)
 - [ ] Özel belge yükle → doğrudan URL ile erişilemiyor, panelden indiriliyor
 - [ ] HTTPS zorunlu (cPanel → Force HTTPS), SSL geçerli
-- [ ] Yedekleme: günlük veritabanı + `storage/app/private` + `public/medya`; **geri yükleme test ortamında denendi** (şartname 17)
+- [ ] `php artisan balkan:yedek` çalıştı; `php artisan balkan:yedek-dogrula` "✓ Geri yükleme doğrulandı" dedi (şartname 17)
+- [ ] `storage/app/yedekler` içeriği düzenli olarak sunucu DIŞINA kopyalanıyor (cPanel yedeği / indirme); YEDEK_PAROLA ayrı yerde saklı
 
-## 7. Güncelleme (sonraki sürümler)
+## 7. Yedek ve geri yükleme
+
+```bash
+php artisan balkan:yedek                       # veritabanı + özel belgeler + medya → storage/app/yedekler/*.zip (AES-256)
+php artisan balkan:yedek-dogrula [dosya]       # geçici veritabanına geri yükler; satır sayısı, mali toplamlar, dosya özetleri
+php artisan balkan:geri-yukle DOSYA --evet     # CANLI veriyi yedektekiyle değiştirir; önce doğrular ve güvenlik yedeği alır
+```
+
+Yedek mysqldump gerektirmez. Doğrulama sonucu panelde İşlem Geçmişi'ne düşer. Parolası kaybolan yedek açılamaz.
+
+## 8. Güncelleme (sonraki sürümler)
 
 Yerelde: `npm run build`, üretim `vendor`, commit → sunucuda çek →
 `php artisan optimize:clear && php artisan migrate --force && php artisan filament:assets && php artisan optimize`.

@@ -97,6 +97,14 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    /*
+     * Yedek zip'lerinin AES-256 parolası (php artisan balkan:yedek). Uygulama
+     * anahtarından AYRI tutulur: yedek başka bir sunucuya geri yüklenebilsin.
+     * Parolayı kaybeden yedeği açamaz — güvenli bir yerde saklayın.
+     */
+    'yedek_parola' => env('YEDEK_PAROLA'),
+    'yedek_sakla' => (int) env('YEDEK_SAKLA', 14),
+
     'key' => env('APP_KEY'),
 
     'previous_keys' => [
