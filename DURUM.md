@@ -1,6 +1,6 @@
 # Balkan Emlak ve Yönetim — Durum
 
-Son güncelleme: 2026-09-28 · **137 test** (33 vitrin + 44 panel + 33 site finansı + 20 site paneli + 7 yedek) yeşil
+Son güncelleme: 2026-09-28 · **149 test** yeşil
 Şartname: `balkan-emlak-ve-yonetim-proje.md` (kullanıcıdan). Canlıya çıkılmadı, uzak depo yok.
 
 ## Yerel çalıştırma
@@ -79,6 +79,17 @@ Hesaplar: siteyonetici@, muhasebe@, saha@ (`@balkanemlak.test`).
 kendi aralarında vade sırasıyla kapanır; üst çubukta kalıcı "aktif site" seçici yok (gösterge panelinde var);
 gecikme bedeli kapalı (şartname 8.2 — ayrıca kapsamlandırılacak); sakin portalı, çevrimiçi ödeme, banka
 entegrasyonu faz 3.
+
+## Teslim belgeleri (şartname 19)
+
+- [docs/KULLANICI-KILAVUZU.md](docs/KULLANICI-KILAVUZU.md) — rol rehberi ve şartname 12'deki iş akışları adım adım
+- [docs/YETKI-TABLOSU.md](docs/YETKI-TABLOSU.md) ve [docs/VERITABANI.md](docs/VERITABANI.md) — **koddan üretilir**
+  (`php artisan balkan:belgeler`); izin ya da tablo değişip belge yenilenmezse `BelgelerTest` kırmızı yanar
+- `DEPLOY.md` — kurulum, yedek, kontrol listesi
+
+## Şartname 10 ekleri
+Eski adres yönlendirmeleri (Web İçerikleri → Yönlendirmeler; yalnız 404 olacak isteklerde, başlık değişince otomatik
+301, zincir/döngü yok), Sayfa/Yazı/Hizmet önizlemesi, görsellerde kullanım hakkı ve kaynak notu.
 
 ## Yedekleme (şartname 15, 17)
 
