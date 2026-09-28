@@ -61,7 +61,8 @@ değişir; görmediğiniz bir ekran için yetkiniz yoktur (ayrıntı: [Yetki tab
 ### 2.3 Yönetim teklifi talebi (şartname 12)
 1. Talep "Yönetim teklifi" sekmesinde görünür; formda yazılan site adı, blok ve bağımsız bölüm sayısı, ihtiyaçlar talebin ayrıntısındadır.
 2. Sorumlu kişiye atayın, görüşme ve keşif notlarını ekleyin.
-3. Teklif belgesini talebe not olarak iliştirin, takip tarihi girin.
+3. Verilen teklifin özetini (tutar, kapsam, tarih) talebe not olarak yazın, **Sonraki takip** tarihi girin.
+   Talep notlarına dosya eklenmez; teklif belgesini site açıldıktan sonra **Site Belgeleri**'ne yükleyin.
 4. Sonucu **Kabul / Ret / Beklemede** olarak işaretleyin. Kabul edilen için **Site Yönetimi → Siteler / Apartmanlar**'da siteyi açın (bölüm 3.1).
 
 ### 2.4 Randevular ve komisyon
