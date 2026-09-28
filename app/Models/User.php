@@ -6,10 +6,6 @@ use App\Enums\Rol;
 use App\Models\Concerns\IslemKaydeder;
 use App\Support\Yetki;
 use Database\Factories\UserFactory;
-use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthentication;
-use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthenticationRecovery;
-use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthentication;
-use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthenticationRecovery;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
@@ -27,30 +23,10 @@ use Illuminate\Support\Facades\Storage;
  * FilamentUser BİLEREK uygulanıyor: bu arayüz olmadan Filament paneli
  * production ortamında kimseye açılmaz (Zeys'te testte yakalandı).
  */
-class User extends Authenticatable implements FilamentUser, HasAppAuthentication, HasAppAuthenticationRecovery, HasName
+class User extends Authenticatable implements FilamentUser, HasName
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, InteractsWithAppAuthentication, InteractsWithAppAuthenticationRecovery, IslemKaydeder, Notifiable;
-
-    /**
-     * İki aşamalı doğrulamanın ZORUNLU olduğu roller (şartname 15: yönetici
-     * hesapları). Mali kayıt ve kullanıcı yönetimi yapan roller dahil; emlak
-     * danışmanı, içerik editörü ve saha personelinde isteğe bağlı.
-     * Zorlama: App\Http\Middleware\IkiAsamaliZorunlu (config balkan.mfa_zorunlu).
-     */
-    public const MFA_ZORUNLU_ROLLER = ['sistem_yoneticisi', 'sirket_yoneticisi', 'site_yoneticisi', 'muhasebe_sorumlusu'];
-
-    public function ikiAsamaliZorunlu(): bool
-    {
-        $rol = $this->rol instanceof Rol ? $this->rol->value : (string) $this->rol;
-
-        return in_array($rol, self::MFA_ZORUNLU_ROLLER, true);
-    }
-
-    public function ikiAsamaliEtkin(): bool
-    {
-        return filled($this->getAppAuthenticationSecret());
-    }
+    use HasFactory, IslemKaydeder, Notifiable;
 
     protected $fillable = [
         'name', 'email', 'password', 'rol', 'aktif', 'gorev', 'telefon', 'whatsapp',

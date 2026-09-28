@@ -54,7 +54,6 @@ DB_PASSWORD=...
 SESSION_DRIVER=database
 SESSION_SECURE_COOKIE=true
 CACHE_STORE=database
-MFA_ZORUNLU=true                # yönetici rollerinde iki aşamalı doğrulama (asla false bırakmayın)
 MAIL_MAILER=smtp
 MAIL_HOST=... MAIL_PORT=587 MAIL_USERNAME=... MAIL_PASSWORD=... MAIL_FROM_ADDRESS=...
 ```
@@ -76,8 +75,7 @@ Tohumdaki `*.test` hesapları canlıda rastgele parolayla oluşur; kullanılmaya
 ## 6. Kurulum sonrası kontrol listesi
 
 - [ ] `/` , `/emlak`, bir ilan, `/site-yonetimi`, `/yonetim-teklifi` 200
-- [ ] `/admin` giriş → profil sayfasına yönlendirme → doğrulayıcı uygulama kuruldu, kurtarma kodları güvenli yere kaydedildi
-- [ ] Çıkış + tekrar giriş 6 haneli kod istiyor; yönetici tüm menüleri görüyor
+- [ ] `/admin` giriş; yönetici tüm menüleri görüyor
 - [ ] `/robots.txt` canlıda `Disallow: /admin` + sitemap satırı veriyor; `/sitemap.xml` açılıyor
 - [ ] Panel → Site Ayarları: firma bilgileri, iletişim kişileri, bildirim e-postası girildi
 - [ ] Bir test başvurusu → panelde "Başvurular"a düştü, bildirim e-postası geldi
