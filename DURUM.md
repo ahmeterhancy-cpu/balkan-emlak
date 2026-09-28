@@ -137,7 +137,8 @@ Boş ayar sitede **hiç çizilmez**; yer tutucu metin yayımlanmaz.
 - Logo yok → metin logo ("BALKAN / Emlak ve Yönetim"). Favicon geçici.
 - "Hukuki yönetim" metni temkinli taslak; işletmenin gerçek kapsamıyla yeniden yazılmalı.
 - KVKK / gizlilik / çerez metinleri taslak, `[TEYİT BEKLİYOR]` işaretli, sitede uyarı şeridiyle görünüyor.
-- Konum ağacı Edirne varsayımıyla (Merkez, Keşan, Uzunköprü, Havsa) — Emlak → Konumlar'dan değişir.
+- Hizmet bölgesi **Edirne** (işletme teyit etti): konum ağacında ilin 9 ilçesi var; mahalleler yalnız örnek,
+  eksikleri Emlak → Konumlar'dan eklenir.
 - Referans ve müşteri görüşü yok → bölümler ve menü öğesi gizli.
 
 ## Demo veri

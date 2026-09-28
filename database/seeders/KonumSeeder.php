@@ -6,9 +6,9 @@ use App\Models\Konum;
 use Illuminate\Database\Seeder;
 
 /**
- * Başlangıç konum ağacı. Hizmet verilen şehir ve ilçeler henüz
- * teyit edilmedi (şartname 18/1); Edirne varsayımıyla kuruldu,
- * panelden (Emlak → Konumlar) değiştirilebilir.
+ * Başlangıç konum ağacı. Hizmet bölgesi Edirne (işletme teyidi 2026-09-29):
+ * ilin 9 ilçesi. Mahalleler yalnız örnek; eksikler panelden
+ * (Emlak → Konumlar) eklenir.
  */
 class KonumSeeder extends Seeder
 {
@@ -18,6 +18,11 @@ class KonumSeeder extends Seeder
             'Keşan' => ['Yukarı Zaferiye', 'Aşağı Zaferiye', 'Erikli', 'Cumhuriyet'],
             'Uzunköprü' => ['Mescit', 'Cumhuriyet'],
             'Havsa' => ['Hacıisa', 'Varoş'],
+            'Enez' => [],
+            'İpsala' => [],
+            'Lalapaşa' => [],
+            'Meriç' => [],
+            'Süloğlu' => [],
         ],
     ];
 

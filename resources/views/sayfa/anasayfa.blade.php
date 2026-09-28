@@ -12,6 +12,7 @@
         'telephone' => ayar('telefon'),
         'email' => ayar('eposta'),
         'address' => ayar('adres'),
+        'areaServed' => ['@type' => 'AdministrativeArea', 'name' => 'Edirne'],
     ]), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
 @endpush
 
