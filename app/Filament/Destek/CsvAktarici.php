@@ -83,6 +83,19 @@ class CsvAktarici
         return static::indir('talepler', $baslik, $satirlar, 'Talep CSV', 'talep');
     }
 
+    /**
+     * Site yönetimi raporu (SiteRaporlari yapısı). Ekrandaki tablolarla aynı
+     * satır ve toplamlar; tutarlar sembolsüz sayı, para birimi ayrı sütunda.
+     */
+    public static function siteRaporu(array $rapor): StreamedResponse
+    {
+        abort_unless(static::izinliMi(), 403);
+
+        [$baslik, $satirlar] = SiteRaporlari::csvSatirlari($rapor);
+
+        return static::indir('site-'.($rapor['anahtar'] ?? 'rapor'), $baslik, collect($satirlar), 'Site raporu CSV: '.$rapor['baslik'].' — '.($rapor['site'] ?? ''), 'site_rapor');
+    }
+
     /** CSV hücresi: formül enjeksiyonuna karşı =,+,-,@ ile başlayan metnin önüne ' konur. */
     public static function hucre(mixed $deger): string
     {
