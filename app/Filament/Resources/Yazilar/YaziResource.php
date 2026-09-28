@@ -7,6 +7,7 @@ use App\Filament\Resources\Yazilar\Pages\EditYazi;
 use App\Filament\Resources\Yazilar\Pages\ListYazilar;
 use App\Models\User;
 use App\Models\Yazi;
+use App\Support\GorselHakki;
 use BackedEnum;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
@@ -79,6 +80,7 @@ class YaziResource extends Resource
                     ->label('Görsel alternatif metni')
                     ->maxLength(255)
                     ->required(fn (Get $get) => filled($get('gorsel'))),
+                ...GorselHakki::alanlar(),
                 TextInput::make('slug')->label('Adres (kısa ad)')->maxLength(255)->helperText('Boşsa başlıktan üretilir.')->unique(ignoreRecord: true),
                 Textarea::make('seo_aciklama')->label('SEO açıklaması')->rows(2)->maxLength(300),
             ]),

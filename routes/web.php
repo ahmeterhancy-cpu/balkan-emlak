@@ -4,6 +4,7 @@ use App\Http\Controllers\AnaSayfaController;
 use App\Http\Controllers\BasvuruController;
 use App\Http\Controllers\BilgiController;
 use App\Http\Controllers\KurumsalController;
+use App\Http\Controllers\OnizlemeController;
 use App\Http\Controllers\PortfoyController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\YonetimController;
@@ -23,6 +24,11 @@ Route::get('/emlak', [PortfoyController::class, 'index'])->name('emlak.index');
 Route::get('/ilan/{portfoy:slug}', [PortfoyController::class, 'show'])->name('ilan.detay');
 Route::get('/onizleme/ilan/{portfoy:id}', [PortfoyController::class, 'onizleme'])
     ->middleware('auth')->name('ilan.onizleme');
+Route::middleware('auth')->prefix('onizleme')->name('onizleme.')->group(function () {
+    Route::get('/sayfa/{sayfa:id}', [OnizlemeController::class, 'sayfa'])->name('sayfa');
+    Route::get('/yazi/{yazi:id}', [OnizlemeController::class, 'yazi'])->name('yazi');
+    Route::get('/hizmet/{hizmet:id}', [OnizlemeController::class, 'hizmet'])->name('hizmet');
+});
 
 Route::get('/gayrimenkulunuzu-bize-birakin', [BasvuruController::class, 'portfoyFormu'])->name('basvuru.portfoy');
 

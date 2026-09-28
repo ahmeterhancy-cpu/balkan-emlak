@@ -7,6 +7,7 @@ use App\Enums\Kategori;
 use App\Enums\OperasyonDurumu;
 use App\Enums\YayinDurumu;
 use App\Models\Concerns\IslemKaydeder;
+use App\Models\Concerns\SlugYonlendirmesi;
 use App\Support\Para;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +26,18 @@ use Illuminate\Support\Str;
  */
 class Portfoy extends Model
 {
-    use IslemKaydeder;
+    use IslemKaydeder, SlugYonlendirmesi;
+
+    public function vitrinYolu(string $slug): string
+    {
+        return '/ilan/'.$slug;
+    }
+
+    /** Yalnız en az bir kez yayına çıkmış ilanın eski adresi yönlendirilir. */
+    public function slugYonlendirmesiGerekli(): bool
+    {
+        return $this->yayin_tarihi !== null;
+    }
 
     protected $table = 'portfoyler';
 

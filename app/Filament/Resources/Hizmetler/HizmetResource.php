@@ -6,6 +6,7 @@ use App\Filament\Resources\Hizmetler\Pages\CreateHizmet;
 use App\Filament\Resources\Hizmetler\Pages\EditHizmet;
 use App\Filament\Resources\Hizmetler\Pages\ListHizmetler;
 use App\Models\Hizmet;
+use App\Support\GorselHakki;
 use BackedEnum;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
@@ -68,6 +69,7 @@ class HizmetResource extends Resource
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                     ->maxSize(8192)
                     ->helperText('Kullanım hakkı olan görsel yükleyin; stok görsel gerçek yönetilen site gibi sunulmaz.'),
+                ...GorselHakki::alanlar(),
                 TextInput::make('slug')->label('Adres (kısa ad)')->maxLength(255)->helperText('Boşsa başlıktan üretilir.')->unique(ignoreRecord: true),
                 Toggle::make('yayinda')->label('Yayında')->default(true),
                 TextInput::make('sira')->label('Sıra')->numeric()->default(0),

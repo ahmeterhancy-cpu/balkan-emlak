@@ -6,6 +6,7 @@ use App\Filament\Resources\Referanslar\Pages\CreateReferans;
 use App\Filament\Resources\Referanslar\Pages\EditReferans;
 use App\Filament\Resources\Referanslar\Pages\ListReferanslar;
 use App\Models\Referans;
+use App\Support\GorselHakki;
 use BackedEnum;
 use Closure;
 use Filament\Actions\EditAction;
@@ -66,6 +67,7 @@ class ReferansResource extends Resource
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                     ->maxSize(4096)
                     ->columnSpanFull(),
+                ...GorselHakki::alanlar(),
             ]),
             Section::make('Yayın izni')
                 ->description('Referans ancak yazılı/kayıtlı yayımlama izni alındıysa sitede gösterilebilir.')

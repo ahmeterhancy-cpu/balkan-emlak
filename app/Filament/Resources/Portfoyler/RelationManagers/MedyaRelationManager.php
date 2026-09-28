@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Portfoyler\RelationManagers;
 
 use App\Models\PortfoyMedya;
+use App\Support\GorselHakki;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -71,6 +72,7 @@ class MedyaRelationManager extends RelationManager
                 ->label('Alternatif metin')
                 ->maxLength(255)
                 ->helperText('Görme engelli ziyaretçiler için kısa açıklama: "Salon, güney cephe".'),
+            ...GorselHakki::alanlar(),
         ]);
     }
 
@@ -92,6 +94,17 @@ class MedyaRelationManager extends RelationManager
                     ->formatStateUsing(fn (?string $state) => self::TURLER[$state] ?? $state),
                 IconColumn::make('kapak')->label('Kapak')->boolean(),
                 TextColumn::make('alt_metin')->label('Alternatif metin')->placeholder('— eklenmedi')->limit(50),
+                TextColumn::make('gorsel_hakki')
+                    ->label('Kullanım hakkı')
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state) => GorselHakki::etiket($state))
+                    ->color(fn (?string $state) => match ($state) {
+                        'kendi', 'mulk_sahibi' => 'success',
+                        'lisansli' => 'info',
+                        default => 'warning',
+                    })
+                    ->placeholder('— girilmedi')
+                    ->tooltip(fn (PortfoyMedya $record) => $record->gorsel_kaynak),
             ])
             ->headerActions([
                 Action::make('yukle')
@@ -103,6 +116,7 @@ class MedyaRelationManager extends RelationManager
                     ->schema([
                         static::yukleme(),
                         Select::make('tur')->label('Tür')->options(self::TURLER)->default('foto')->required(),
+                        ...GorselHakki::alanlar(), // yüklenen tüm görsellere uygulanır
                     ])
                     ->action(function (array $data): void {
                         $portfoy = $this->getOwnerRecord();
@@ -116,6 +130,8 @@ class MedyaRelationManager extends RelationManager
                                 'tur' => $data['tur'] ?? 'foto',
                                 'sira' => ++$sira,
                                 'kapak' => ! $kapakVar && $i === 0 && ($data['tur'] ?? 'foto') === 'foto',
+                                'gorsel_hakki' => $data['gorsel_hakki'] ?? null,
+                                'gorsel_kaynak' => $data['gorsel_kaynak'] ?? null,
                             ]);
                         }
 

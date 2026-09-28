@@ -135,6 +135,7 @@ class DemoPortfoySeeder extends Seeder
                         'alt_metin' => $baslik.' — fotoğraf '.($sira + 1),
                         'kapak' => $sira === 0,
                         'sira' => $sira,
+                        'gorsel_hakki' => 'lisansli', 'gorsel_kaynak' => 'Unsplash lisansı — demo görsel, gerçek portföy değil',
                     ]);
                 }
             }

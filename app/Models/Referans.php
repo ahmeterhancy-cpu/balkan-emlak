@@ -17,7 +17,7 @@ class Referans extends Model
 
     protected $table = 'referanslar';
 
-    protected $fillable = ['tur', 'ad', 'alt_baslik', 'metin', 'gorsel', 'izin_alindi', 'izin_tarihi', 'yayinda', 'sira'];
+    protected $fillable = ['tur', 'ad', 'alt_baslik', 'metin', 'gorsel', 'izin_alindi', 'izin_tarihi', 'yayinda', 'sira', 'gorsel_hakki', 'gorsel_kaynak'];
 
     protected function casts(): array
     {

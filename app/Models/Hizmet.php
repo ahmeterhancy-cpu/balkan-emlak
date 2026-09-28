@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\IslemKaydeder;
+use App\Models\Concerns\SlugYonlendirmesi;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -11,11 +12,16 @@ use Illuminate\Support\Str;
 /** Site ve apartman yönetimi hizmeti (genel, hukuki, temizlik, ...). */
 class Hizmet extends Model
 {
-    use IslemKaydeder;
+    use IslemKaydeder, SlugYonlendirmesi;
+
+    public function vitrinYolu(string $slug): string
+    {
+        return '/site-yonetimi/'.$slug;
+    }
 
     protected $table = 'hizmetler';
 
-    protected $fillable = ['baslik', 'slug', 'ikon', 'ozet', 'kapsam', 'surec', 'gorsel', 'yayinda', 'sira', 'seo_aciklama'];
+    protected $fillable = ['baslik', 'slug', 'ikon', 'ozet', 'kapsam', 'surec', 'gorsel', 'yayinda', 'sira', 'seo_aciklama', 'gorsel_hakki', 'gorsel_kaynak'];
 
     protected function casts(): array
     {

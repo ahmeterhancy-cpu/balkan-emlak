@@ -94,6 +94,8 @@ class IcerikSeeder extends Seeder
                 'kapsam' => $kapsam,
                 'surec' => $surec,
                 'gorsel' => $gorsel ? $this->gorselKopyala($gorsel, 'hizmetler') : null,
+                'gorsel_hakki' => $gorsel ? 'lisansli' : null,
+                'gorsel_kaynak' => $gorsel ? 'Unsplash lisansı — temsili görsel' : null,
                 'yayinda' => true,
                 'sira' => $sira,
             ]);
@@ -174,6 +176,7 @@ class IcerikSeeder extends Seeder
                 'icerik' => $icerik,
                 'gorsel' => $this->gorselKopyala($gorsel, 'yazilar'),
                 'gorsel_alt' => $baslik,
+                'gorsel_hakki' => 'lisansli', 'gorsel_kaynak' => 'Unsplash lisansı — demo görsel, gerçek portföy değil',
                 'durum' => 'yayinda',
                 'yayin_tarihi' => now()->subDays(10 * ($i + 1)),
             ]);

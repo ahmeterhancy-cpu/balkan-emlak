@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\IslemKaydeder;
+use App\Models\Concerns\SlugYonlendirmesi;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,11 +13,21 @@ use Illuminate\Support\Str;
 /** Bilgi merkezi yazısı. Taslak → yayında → arşiv. */
 class Yazi extends Model
 {
-    use IslemKaydeder;
+    use IslemKaydeder, SlugYonlendirmesi;
+
+    public function vitrinYolu(string $slug): string
+    {
+        return '/bilgi-merkezi/'.$slug;
+    }
+
+    public function slugYonlendirmesiGerekli(): bool
+    {
+        return $this->yayin_tarihi !== null;
+    }
 
     protected $table = 'yazilar';
 
-    protected $fillable = ['baslik', 'slug', 'kategori', 'ozet', 'icerik', 'gorsel', 'gorsel_alt', 'durum', 'yayin_tarihi', 'yazar_id', 'seo_aciklama'];
+    protected $fillable = ['baslik', 'slug', 'kategori', 'ozet', 'icerik', 'gorsel', 'gorsel_alt', 'durum', 'yayin_tarihi', 'yazar_id', 'seo_aciklama', 'gorsel_hakki', 'gorsel_kaynak'];
 
     protected function casts(): array
     {

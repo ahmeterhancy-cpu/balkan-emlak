@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Yazilar\Pages;
 
 use App\Filament\Destek\SlugDegisinceYonlendir;
 use App\Filament\Resources\Yazilar\YaziResource;
+use App\Filament\Destek\OnizleAksiyonu;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
@@ -16,6 +17,7 @@ class EditYazi extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            OnizleAksiyonu::make('onizleme.yazi'),
             DeleteAction::make(),
         ];
     }

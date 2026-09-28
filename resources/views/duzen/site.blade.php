@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@hasSection('baslik')@yield('baslik') | {{ ayar('firma_adi') }}@else{{ ayar('firma_adi') }} — Emlak ve Site Yönetimi @endif</title>
     <meta name="description" content="@yield('aciklama', ayar('seo_aciklama'))">
-    <meta name="robots" content="@yield('robots', app()->isProduction() ? 'index, follow' : 'noindex, nofollow')">
+    @if (! empty($icerikOnizleme))
+        <meta name="robots" content="noindex, nofollow">
+    @else
+        <meta name="robots" content="@yield('robots', app()->isProduction() ? 'index, follow' : 'noindex, nofollow')">
+    @endif
     <link rel="canonical" href="@yield('kanonik', url()->current())">
     <meta name="theme-color" content="#142d3e">
 
@@ -35,6 +39,13 @@
     <a href="#icerik" class="gorunmez gorunmez-odak">İçeriğe atla</a>
 
     @yield('serit')
+
+    {{-- Panelden "Önizle": yayında olmayan sayfa / yazı / hizmet yetkili kullanıcıya gösteriliyor --}}
+    @if (! empty($icerikOnizleme))
+        <div class="onizleme-seridi" role="status">
+            <strong>Önizleme:</strong> Bu içerik şu an <strong>{{ $icerikOnizleme }}</strong>. Kaydedilmemiş değişiklikler görünmez; ziyaretçiler yalnız yayındaki hali görür.
+        </div>
+    @endif
 
     @php
         $anaTelefon = ayar('telefon');

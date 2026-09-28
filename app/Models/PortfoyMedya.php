@@ -12,7 +12,7 @@ class PortfoyMedya extends Model
 {
     protected $table = 'portfoy_medya';
 
-    protected $fillable = ['portfoy_id', 'yol', 'tur', 'alt_metin', 'kapak', 'sira'];
+    protected $fillable = ['portfoy_id', 'yol', 'tur', 'alt_metin', 'kapak', 'sira', 'gorsel_hakki', 'gorsel_kaynak'];
 
     protected function casts(): array
     {
