@@ -1,6 +1,6 @@
 # Balkan Emlak ve Yönetim — Durum
 
-Son güncelleme: 2026-09-28 · **136 test** (33 vitrin + 44 panel + 33 site finansı + 20 site paneli + 6 yedek) yeşil
+Son güncelleme: 2026-09-28 · **137 test** (33 vitrin + 44 panel + 33 site finansı + 20 site paneli + 7 yedek) yeşil
 Şartname: `balkan-emlak-ve-yonetim-proje.md` (kullanıcıdan). Canlıya çıkılmadı, uzak depo yok.
 
 ## Yerel çalıştırma

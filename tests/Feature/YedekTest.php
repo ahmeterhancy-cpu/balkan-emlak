@@ -136,6 +136,22 @@ class YedekTest extends TestCase
         $this->assertSame($borcToplami, (int) \DB::table('borclar')->sum('tutar_kurus'));
         $this->assertSame('GIZLI-TAPU-ICERIGI', File::get($this->kok.'/private/belgeler/tapu.pdf'));
         $this->assertFileExists($guvenlik); // geri dönüş için önceki durum saklandı
+        $this->assertFileExists($yol);      // geri yüklenen yedeğin üzerine yazılmadı
+        $this->assertNotSame($yol, $guvenlik);
+        $this->assertSame($yol, $this->servis()->sonYedek()); // güvenlik yedeği "en son yedek" sayılmaz
+    }
+
+    public function test_ayni_saniyede_alinan_yedekler_birbirinin_uzerine_yazmaz_temizlik_guvenligi_silmez(): void
+    {
+        $s = $this->servis();
+        $yedekler = [$s->al(), $s->al(), $s->al()];
+        $guvenlik = $s->al(tur: 'guvenlik');
+
+        $this->assertCount(3, array_unique($yedekler));
+
+        $this->assertSame(2, $s->temizle(1));
+        $this->assertFileExists($guvenlik);
+        $this->assertSame(1, count(glob($s->klasor().'/balkan-2*.zip')));
     }
 
     public function test_komutlar(): void

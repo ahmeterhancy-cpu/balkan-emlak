@@ -59,7 +59,7 @@ class Yedekleyici
     /**
      * Yedek al. Dönen: zip yolu.
      */
-    public function al(bool $sifresizeIzin = false): string
+    public function al(bool $sifresizeIzin = false, string $tur = 'yedek'): string
     {
         $parola = $this->parola();
         if (! $parola && ! $sifresizeIzin) {
@@ -67,10 +67,16 @@ class Yedekleyici
         }
 
         File::ensureDirectoryExists($this->klasor());
-        $yol = $this->klasor().'/balkan-'.now()->format('Ymd-His').'.zip';
+        /*
+         * Ad benzersiz ve dosya ASLA üzerine yazılmaz. Saniye hassasiyetli adla,
+         * geri yüklemenin aldığı güvenlik yedeği aynı saniyede geri yüklenen yedeğin
+         * üzerine yazıyor ve yanlış durum geri yükleniyordu (YedekTest'te yakalandı).
+         */
+        $on = $tur === 'guvenlik' ? 'balkan-guvenlik-' : 'balkan-';
+        $yol = $this->klasor().'/'.$on.now()->format('Ymd-His').'-'.bin2hex(random_bytes(3)).'.zip';
 
         $zip = new ZipArchive;
-        if ($zip->open($yol, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+        if (file_exists($yol) || $zip->open($yol, ZipArchive::CREATE | ZipArchive::EXCL) !== true) {
             throw new RuntimeException('Yedek dosyası açılamadı: '.$yol);
         }
         if ($parola) {
@@ -218,7 +224,7 @@ class Yedekleyici
             throw new RuntimeException("Yedek doğrulanamadı, geri yükleme yapılmadı:\n- ".implode("\n- ", $dogrulama['hatalar']));
         }
 
-        $guvenlik = $this->al(sifresizeIzin: true);
+        $guvenlik = $this->al(sifresizeIzin: true, tur: 'guvenlik');
 
         [$zip, $manifest] = $this->ac($yol);
         try {
@@ -246,7 +252,7 @@ class Yedekleyici
     /** En eski yedekleri sil; son $adet yedek kalır. */
     public function temizle(int $adet): int
     {
-        $dosyalar = collect(File::glob($this->klasor().'/balkan-*.zip'))->sort()->values();
+        $dosyalar = $this->duzenliYedekler();
         $silinecek = $dosyalar->slice(0, max(0, $dosyalar->count() - $adet));
         $silinecek->each(fn ($f) => File::delete($f));
 
@@ -255,7 +261,19 @@ class Yedekleyici
 
     public function sonYedek(): ?string
     {
-        return collect(File::glob($this->klasor().'/balkan-*.zip'))->sort()->last();
+        return $this->duzenliYedekler()->last();
+    }
+
+    /**
+     * Gece alınan düzenli yedekler, eskiden yeniye. Geri yükleme öncesi alınan
+     * güvenlik yedekleri ("balkan-guvenlik-") burada YOK: en son yedek sanılmaz,
+     * otomatik temizlikte silinmez (elle silinir).
+     */
+    private function duzenliYedekler(): \Illuminate\Support\Collection
+    {
+        return collect(File::glob($this->klasor().'/balkan-*.zip'))
+            ->reject(fn ($f) => str_contains(basename($f), 'balkan-guvenlik-'))
+            ->sort()->values();
     }
 
     /* ------------------------------------------------------------------ */
