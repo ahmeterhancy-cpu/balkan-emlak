@@ -1,6 +1,6 @@
 # Balkan Emlak ve Yönetim — Durum
 
-Son güncelleme: 2026-09-28 · **77 test** (33 vitrin + 44 panel) yeşil
+Son güncelleme: 2026-09-28 · **130 test** (33 vitrin + 44 emlak paneli + 33 site finansı + 20 site paneli) yeşil
 Şartname: `balkan-emlak-ve-yonetim-proje.md` (kullanıcıdan). Canlıya çıkılmadı, uzak depo yok.
 
 ## Yerel çalıştırma
@@ -21,7 +21,7 @@ Canlıda yönetici: `php artisan balkan:yonetici eposta@alan.adi` (rastgele paro
 |---|---|
 | Teknik yol | Laravel 13 + Filament 5. RealHomes Modern 5 (demo05) **tasarım referansı** olarak yeniden yazıldı; WordPress/tema lisansı kullanılmadı. Tek veri kaynağı bu uygulama. |
 | Bu turun kapsamı | Kurumsal site + emlak modülü + başvurular + web içerikleri + kullanıcı/rol + işlem geçmişi. |
-| Sonraki tur | Site ve apartman yönetimi paneli: siteler/bloklar/bağımsız bölümler, aidat-borçlandırma, tahsilat, gider, kasa/banka, iş emri, personel, duyuru (şartname 8). Roller (site yöneticisi, muhasebe, saha) şimdiden tanımlı, izinleri yok. |
+| 2. tur | Site ve apartman yönetimi (şartname 8) tamamlandı — aşağıda. |
 | Renk / yazı | Şartnamedeki önerilen palet (lacivert #142D3E, yeşil #739B16) + Rubik (referansın yazısı). Kesin marka kimliği gelince yalnız `resources/css/temel.css` jetonları ve panel rampası değişir. Beyaz yazılı düğmelerde erişilebilirlik için koyu yeşil #5A7A10. |
 | Saat dilimi | Europe/Istanbul (şartname: Türkiye saat dilimi). |
 
@@ -47,6 +47,39 @@ Hizmetler, Bilgi merkezi, Referanslar (izinsiz yayımlanamaz), SSS, Kullanıcıl
 ve tam koordinatı sızdırmaz (testli). Panel HTML'i vitrine temizlenerek basılır. Formlar: bal küpü + şifreli form
 zamanı + hız sınırı (6/dk, 40/gün).
 
+## Site ve apartman yönetimi (2. tur)
+
+**Muhasebe çekirdeği** `app/Services/SiteFinans` — panel yalnız bu servisleri çağırır:
+- Borçlandırma: sabit / m² / arsa payı / özel dağıtım; önizleme; kesinleştirme **tekrar çalıştırılamaz**
+  (kilit + iki benzersiz anahtar). m²/arsa payında kuruş "en büyük kalan" ile toplama tam eşit.
+- Tahsilat: en eski vadeli borçtan kapanır (elle öncelik verilebilir), dağıtım önizlemesi, fazla ödeme **avans**
+  (gelir sayılmaz, yeni borçta otomatik mahsup). Dekontlu tahsilat doğrulanana kadar kasaya/borca işlenmez.
+- Mali kayıt silinmez / tutarı değişmez (`DegismezMaliKayit`); iade ve borç düzeltmesi **gerekçeli karşı kayıt**.
+- Gider: taslak → onay bekliyor → onaylandı/reddedildi; ödeme ayrı (kısmi, geri alma). Site onay limitini aşanı
+  yalnız şirket yöneticisi onaylar.
+- Kasa/banka defteri, açılış bakiyesi (dayanaklı), transfer (gelir/gider sayılmaz), mutabakat, dönem kapama.
+- Borç sorumlusu tarihli malik/kiracı ilişkisinden; taşınmada geçmiş korunur.
+- Para birimleri hiçbir toplamda karışmaz; şirket komisyonları site raporlarında yok.
+
+**Yetki**: rol izni + `site_kullanici` ataması. Site yöneticisi / muhasebe yalnız atandığı siteyi görür (başka sitenin
+kaydı adresle 404); saha personeli yalnız kendine atanan iş emri ve görevi görür, tamamlar, kapatamaz.
+Tarayıcıda doğrulandı (siteyonetici@, saha@).
+
+**Panel**: Site Yönetimi (siteler, bloklar, bölümler, malik/kiracı, ekstre), Site Finansı (borçlandırma,
+borçlar, tahsilat, giderler, tedarikçiler, kasa/banka, transferler), Site Operasyonu (iş emirleri, bakım planları,
+varlıklar, görevler, duyurular, sürümlü belgeler), Site Raporları (dönem özeti, bölüm bakiyeleri / vadesi
+geçmiş, ekstre, gider özeti + tedarikçi borçları, kasa/banka dökümü, operasyon) — ekran, CSV ve yazdır/PDF
+aynı üreticiden. Gösterge panelinde site + dönem seçici.
+
+**Demo**: `DemoSiteSeeder` — Çamlık Sitesi (24 daire) ve Yıldız Apartmanı (8 daire + dükkân), 3 aylık aidat,
+kısmi/fazla ödemeler, doğrulanmayı bekleyen dekont, limit üstü onay bekleyen gider, Ağustos kapalı.
+Hesaplar: siteyonetici@, muhasebe@, saha@ (`@balkanemlak.test`).
+
+**Bilinen sınırlar**: ayrı "Malikler ve Kiracılar" listesi yok (bölüm sayfasında); tahsilatta öncelikli borçlar
+kendi aralarında vade sırasıyla kapanır; üst çubukta kalıcı "aktif site" seçici yok (gösterge panelinde var);
+gecikme bedeli kapalı (şartname 8.2 — ayrıca kapsamlandırılacak); sakin portalı, çevrimiçi ödeme, banka
+entegrasyonu faz 3.
+
 ## Bilerek boş bırakılanlar (yayından önce teyit — şartname 2 ve 18)
 
 Boş ayar sitede **hiç çizilmez**; yer tutucu metin yayımlanmaz.
@@ -70,7 +103,6 @@ Boş ayar sitede **hiç çizilmez**; yer tutucu metin yayımlanmaz.
 
 ## Bilinen eksikler / sonraki adımlar
 
-1. Site ve apartman yönetimi modülü (sonraki tur).
 2. E-posta: `MAIL_*` boş; başvuru bildirimi ancak Site Ayarları → bildirim e-postası + SMTP girilince gider.
 3. Yönetici hesaplarında çok faktörlü doğrulama (şartname 15) henüz yok — Filament MFA eklenmeli.
 4. Canlı kurulum paketi (cPanel: `public/build` depoya, `vendor` no-dev, InnoDB, `filament:assets`) hazırlanmadı.
