@@ -72,6 +72,10 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->navigationGroups([
                 'Emlak Yönetimi',
+                'Site Yönetimi',
+                'Site Finansı',
+                'Site Operasyonu',
+                'Site Raporları',
                 'Başvurular',
                 'Web İçerikleri',
                 'Sistem',
