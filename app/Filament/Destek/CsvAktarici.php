@@ -27,12 +27,15 @@ class CsvAktarici
         return Yetki::var('disa_aktar');
     }
 
-    /** @param Builder<Portfoy>|Collection<int, Portfoy> $kaynak */
-    public static function portfoyler(Builder|Collection $kaynak): StreamedResponse
+    /**
+     * @param  Builder<Portfoy>|Collection<int, Portfoy>  $kaynak
+     * @param  bool|null  $icBilgi  false verilirse iç bilgiler izin olsa da çıkarılır; izni GENİŞLETEMEZ.
+     */
+    public static function portfoyler(Builder|Collection $kaynak, ?bool $icBilgi = null): StreamedResponse
     {
         abort_unless(static::izinliMi(), 403);
 
-        $icBilgi = Yetki::var('portfoy.ic_bilgi');
+        $icBilgi = Yetki::var('portfoy.ic_bilgi') && ($icBilgi ?? true);
         $kayitlar = $kaynak instanceof Builder
             ? $kaynak->with(['il', 'ilce', 'mahalle', 'danisman', 'mulkSahibi'])->get()
             : $kaynak->load(['il', 'ilce', 'mahalle', 'danisman', 'mulkSahibi']);

@@ -74,7 +74,12 @@ class Kisi extends Model
             ->when($haricId, fn ($q) => $q->whereKeyNot($haricId))
             ->where(function ($q) use ($anahtar, $eposta) {
                 if ($anahtar) {
-                    $q->orWhere('telefon', 'like', '%'.substr($anahtar, -7));
+                    // Boşluk/tire/parantezli yazımlar ("+90 532 444 5566") da yakalansın:
+                    // ön süzgeç ayraçları atılmış değer üzerinde çalışır.
+                    $q->orWhereRaw(
+                        "replace(replace(replace(replace(replace(telefon, ' ', ''), '-', ''), '(', ''), ')', ''), '.', '') like ?",
+                        ['%'.substr($anahtar, -7)],
+                    );
                 }
                 if ($eposta) {
                     $q->orWhereRaw('lower(eposta) = ?', [$eposta]);

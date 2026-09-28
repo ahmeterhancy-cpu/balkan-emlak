@@ -2,9 +2,13 @@
 
 namespace Tests\Feature\Panel;
 
-use App\Enums\Islem;
 use App\Enums\KomisyonDurumu;
 use App\Enums\TalepTuru;
+use App\Filament\Resources\IslemKayitlari\IslemKaydiResource;
+use App\Filament\Widgets\EmlakOzeti;
+use App\Filament\Widgets\IcerikOzeti;
+use App\Filament\Widgets\OnayBekleyenIlanlar;
+use App\Filament\Widgets\YaklasanRandevular;
 use App\Models\Hizmet;
 use App\Models\IslemKaydi;
 use App\Models\Kisi;
@@ -15,10 +19,6 @@ use App\Models\Sayfa;
 use App\Models\Sss;
 use App\Models\Talep;
 use App\Models\Yazi;
-use App\Filament\Widgets\EmlakOzeti;
-use App\Filament\Widgets\IcerikOzeti;
-use App\Filament\Widgets\OnayBekleyenIlanlar;
-use App\Filament\Widgets\YaklasanRandevular;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -82,7 +82,7 @@ class SayfaErisimTest extends TestCase
 
         $this->assertFalse(auth()->user()->can('update', $kayit));
         $this->assertFalse(auth()->user()->can('delete', $kayit));
-        $this->assertFalse(\App\Filament\Resources\IslemKayitlari\IslemKaydiResource::canCreate());
+        $this->assertFalse(IslemKaydiResource::canCreate());
     }
 
     public function test_danisman_ve_editor_gosterge_panelini_acar(): void

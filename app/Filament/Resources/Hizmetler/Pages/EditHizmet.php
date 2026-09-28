@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Hizmetler\Pages;
 
-use App\Filament\Resources\Hizmetler\HizmetResource;
 use App\Filament\Destek\SlugDegisinceYonlendir;
+use App\Filament\Resources\Hizmetler\HizmetResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 

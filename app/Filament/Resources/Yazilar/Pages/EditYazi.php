@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Yazilar\Pages;
 
-use App\Filament\Resources\Yazilar\YaziResource;
 use App\Filament\Destek\SlugDegisinceYonlendir;
+use App\Filament\Resources\Yazilar\YaziResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 

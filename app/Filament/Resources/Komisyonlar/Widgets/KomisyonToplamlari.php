@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Komisyonlar\Widgets;
 use App\Enums\KomisyonDurumu;
 use App\Models\Komisyon;
 use App\Support\Para;
+use App\Support\Yetki;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -20,7 +21,7 @@ class KomisyonToplamlari extends StatsOverviewWidget
 
     public static function canView(): bool
     {
-        return \App\Support\Yetki::var('komisyon.goruntule');
+        return Yetki::var('komisyon.goruntule');
     }
 
     public static function gruplar(): array
