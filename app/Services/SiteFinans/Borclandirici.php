@@ -33,7 +33,8 @@ class Borclandirici
             ->where('aktif', true)
             ->when($b->bolum_turleri, fn ($q, $turler) => $q->whereIn('tur', $turler))
             ->with(['blok', 'iliskiler'])
-            ->orderBy('blok_id')->orderByRaw('CAST(no AS INTEGER)')->orderBy('no')
+            // Doğal sıra (2 < 10) — CAST(.. AS INTEGER) MySQL'de geçersiz, uzunluk + metin taşınabilir
+            ->orderBy('blok_id')->orderByRaw('LENGTH(no)')->orderBy('no')
             ->get();
 
         if ($bolumler->isEmpty()) {
