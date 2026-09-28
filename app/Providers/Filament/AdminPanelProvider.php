@@ -3,7 +3,9 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\GostergePaneli;
+use App\Http\Middleware\IkiAsamaliZorunlu;
 use App\Models\Ayar;
+use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -27,6 +29,13 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // Profil: ad/e-posta/parola ve iki aşamalı doğrulama kurulumu
+            ->profile(isSimple: false)
+            // Doğrulayıcı uygulama (Google / Microsoft Authenticator) + kurtarma kodları.
+            // Zorunluluk rol bazlı: App\Http\Middleware\IkiAsamaliZorunlu
+            ->multiFactorAuthentication([
+                AppAuthentication::make()->recoverable()->brandName('Balkan Emlak ve Yönetim'),
+            ])
             ->brandName(fn (): string => (string) Ayar::al('firma_adi', 'Balkan Emlak ve Yönetim'))
             ->colors([
                 /*
@@ -102,6 +111,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                IkiAsamaliZorunlu::class,
             ]);
     }
 }

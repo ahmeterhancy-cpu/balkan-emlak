@@ -30,8 +30,8 @@ trait IslemKaydeder
                 return;
             }
 
-            $onceki = array_intersect_key($model->getOriginal(), $degisen);
-            IslemKaydi::yaz('guncellendi', $model, static::duzlestir($onceki), $degisen);
+            $onceki = static::islemAlanlari($model, array_intersect_key($model->getOriginal(), $degisen));
+            IslemKaydi::yaz('guncellendi', $model, $onceki, $degisen);
         });
 
         static::deleted(function (Model $model) {
@@ -39,9 +39,22 @@ trait IslemKaydeder
         });
     }
 
+    /**
+     * Gizli alanlar ($hidden — parola, iki aşamalı doğrulama anahtarı ve
+     * kurtarma kodları) işlem geçmişine ASLA yazılmaz; yalnız değiştiği not edilir.
+     */
     private static function islemAlanlari(Model $model, array $alanlar): array
     {
-        return static::duzlestir(array_diff_key($alanlar, array_flip(static::$islemKaydiHaric)));
+        $gizli = array_flip(array_merge(static::$islemKaydiHaric, $model->getHidden()));
+        $sonuc = static::duzlestir(array_diff_key($alanlar, $gizli));
+
+        foreach (array_intersect_key($alanlar, $gizli) as $ad => $_) {
+            if (! in_array($ad, ['updated_at', 'created_at', 'remember_token'], true)) {
+                $sonuc[$ad] = '[gizli — değişti]';
+            }
+        }
+
+        return $sonuc;
     }
 
     /** Enum ve tarih nesnelerini JSON'a yazılabilir değere çevir. */
