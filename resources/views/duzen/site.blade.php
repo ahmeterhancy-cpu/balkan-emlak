@@ -197,7 +197,7 @@
     </div>
 
     <main id="icerik">
-        @if (session('basari'))
+        @if (session('basari') && ! session('basari_form'))
             <div class="kap" style="padding-top:24px">
                 <div class="bildirim bildirim-basari" role="status"><x-simge ad="onay" /><div><p>{{ session('basari') }}</p></div></div>
             </div>
