@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Gun;
 use App\Models\Concerns\IslemKaydeder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,7 +23,7 @@ class PortfoyBelgesi extends Model
 
     protected function casts(): array
     {
-        return ['gecerlilik_bitis' => 'date'];
+        return ['gecerlilik_bitis' => Gun::class];
     }
 
     public const TURLER = [

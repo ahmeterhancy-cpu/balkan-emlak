@@ -44,6 +44,65 @@ class Kapsam
             : $sorgu->where($sorgu->qualifyColumn('danisman_id'), $k?->id ?? 0);
     }
 
+    /**
+     * Kullanıcının erişebildiği site kimlikleri; null = hepsi.
+     *
+     * @return list<int>|null
+     */
+    public static function siteIdleri(?User $k = null): ?array
+    {
+        $k ??= auth()->user();
+
+        if (Yetki::var('site.goruntule_tumu', $k)) {
+            return null;
+        }
+
+        if (! $k) {
+            return [];
+        }
+
+        return array_map('intval', \Illuminate\Support\Facades\DB::table('site_kullanici')
+            ->where('user_id', $k->id)->pluck('site_id')->all());
+    }
+
+    public static function siteErisimi(int $siteId, ?User $k = null): bool
+    {
+        $idler = self::siteIdleri($k);
+
+        return $idler === null || in_array($siteId, $idler, true);
+    }
+
+    /** `siteler` tablosu sorgusu. */
+    public static function siteler(Builder $sorgu, ?User $k = null): Builder
+    {
+        $idler = self::siteIdleri($k);
+
+        return $idler === null ? $sorgu : $sorgu->whereIn($sorgu->qualifyColumn('id'), $idler);
+    }
+
+    /** site_id sütunu olan her tablo (borç, tahsilat, gider, iş emri...). */
+    public static function siteyeBagli(Builder $sorgu, ?User $k = null): Builder
+    {
+        $idler = self::siteIdleri($k);
+
+        return $idler === null ? $sorgu : $sorgu->whereIn($sorgu->qualifyColumn('site_id'), $idler);
+    }
+
+    /**
+     * İş emri ve görevler: operasyon.yonet olan site kapsamında hepsini,
+     * saha personeli yalnız kendisine atananları görür.
+     */
+    public static function operasyon(Builder $sorgu, string $kisiSutunu, ?User $k = null): Builder
+    {
+        $k ??= auth()->user();
+
+        if (Yetki::var('operasyon.yonet', $k)) {
+            return self::siteyeBagli($sorgu, $k);
+        }
+
+        return self::siteyeBagli($sorgu, $k)->where($sorgu->qualifyColumn($kisiSutunu), $k?->id ?? 0);
+    }
+
     public static function kisiler(Builder $sorgu, ?User $k = null): Builder
     {
         $k ??= auth()->user();

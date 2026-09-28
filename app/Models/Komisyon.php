@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Gun;
 use App\Enums\KomisyonDurumu;
 use App\Models\Concerns\IslemKaydeder;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +24,7 @@ class Komisyon extends Model
     {
         return [
             'durum' => KomisyonDurumu::class,
-            'odeme_tarihi' => 'date',
+            'odeme_tarihi' => Gun::class,
             'beklenen_kurus' => 'integer',
             'gerceklesen_kurus' => 'integer',
         ];

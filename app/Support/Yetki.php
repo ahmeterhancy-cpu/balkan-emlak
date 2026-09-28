@@ -15,7 +15,8 @@ use App\Models\User;
  *
  * "_tumu" ile biten izin yoksa kullanıcı yalnız KENDİ kayıtlarını görür:
  * danışman yalnız sorumlu olduğu portföyleri, kendisine atanmış talepleri
- * ve kendi randevularını.
+ * ve kendi randevularını. Site yönetiminde "site.goruntule_tumu" yoksa
+ * kullanıcı yalnız site_kullanici tablosunda atandığı siteleri görür.
  */
 class Yetki
 {
@@ -42,6 +43,23 @@ class Yetki
         'ayar.yonet' => 'Site ayarları',
         'islem_gecmisi.goruntule' => 'İşlem geçmişi',
         'disa_aktar' => 'Dışa aktarma',
+
+        // Site ve apartman yönetimi — "site.goruntule_tumu" yoksa yalnız atanmış siteler
+        'site.goruntule_tumu' => 'Tüm siteleri görme',
+        'site.yonet' => 'Site, blok, bağımsız bölüm, malik/kiracı kaydı',
+        'finans.goruntule' => 'Borç, tahsilat, gider ve hesapları görme',
+        'finans.borclandir' => 'Borçlandırma (önizleme ve kesinleştirme), borç düzeltme',
+        'finans.tahsilat' => 'Tahsilat kaydı, iade, dekont doğrulama',
+        'finans.gider' => 'Gider kaydı ve ödeme',
+        'finans.hesap' => 'Kasa/banka, açılış bakiyesi, transfer, mutabakat',
+        'gider.onayla' => 'Gider onayı (site onay limitine kadar)',
+        'gider.onayla_limitsiz' => 'Onay limitini aşan gider onayı',
+        'donem.kapat' => 'Dönem kapama',
+        'donem.duzelt' => 'Kapalı dönemde gerekçeli düzeltme',
+        'operasyon.yonet' => 'İş emri, bakım planı, görev, duyuru yönetimi',
+        'operasyon.saha' => 'Kendisine atanan görev ve iş emirlerini tamamlama',
+        'site_belge.goruntule' => 'Site belgeleri',
+        'site_rapor' => 'Site raporları',
     ];
 
     /** @var array<string, list<string>> */
@@ -54,6 +72,9 @@ class Yetki
             'portfoy.sil', 'portfoy.ic_bilgi', 'belge.goruntule',
             'kisi.goruntule_tumu', 'talep.goruntule_tumu', 'talep.ata', 'randevu.goruntule_tumu',
             'komisyon.goruntule', 'konum.yonet', 'icerik.yonet', 'islem_gecmisi.goruntule', 'disa_aktar',
+            'site.goruntule_tumu', 'site.yonet', 'finans.goruntule', 'finans.borclandir', 'finans.tahsilat',
+            'finans.gider', 'finans.hesap', 'gider.onayla', 'gider.onayla_limitsiz', 'donem.kapat', 'donem.duzelt',
+            'operasyon.yonet', 'site_belge.goruntule', 'site_rapor',
         ],
 
         // Kendi portföyü: oluşturur, düzenler, incelemeye gönderir; yayımlayamaz.
@@ -63,10 +84,18 @@ class Yetki
 
         'icerik_editoru' => ['panel', 'icerik.yonet'],
 
-        // Site yönetimi modülü gelene kadar yalnız panele giriş.
-        'site_yoneticisi' => ['panel'],
-        'muhasebe_sorumlusu' => ['panel'],
-        'saha_personeli' => ['panel'],
+        // Yalnız atanmış siteler (site_kullanici). Mali kayıt girmez; limit içi gider onaylar.
+        'site_yoneticisi' => [
+            'panel', 'site.yonet', 'finans.goruntule', 'finans.gider', 'gider.onayla',
+            'operasyon.yonet', 'site_belge.goruntule', 'site_rapor',
+        ],
+        // Yalnız atanmış siteler. Borçlandırma, tahsilat, gider, hesap, dönem kapama.
+        'muhasebe_sorumlusu' => [
+            'panel', 'finans.goruntule', 'finans.borclandir', 'finans.tahsilat', 'finans.gider', 'finans.hesap',
+            'donem.kapat', 'site_belge.goruntule', 'site_rapor', 'disa_aktar',
+        ],
+        // Yalnız kendisine atanan görev ve iş emirleri (şartname 9)
+        'saha_personeli' => ['panel', 'operasyon.saha'],
     ];
 
     public static function var(string $izin, ?User $kullanici = null): bool

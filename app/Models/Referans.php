@@ -21,7 +21,7 @@ class Referans extends Model
 
     protected function casts(): array
     {
-        return ['izin_alindi' => 'boolean', 'yayinda' => 'boolean', 'izin_tarihi' => 'date'];
+        return ['izin_alindi' => 'boolean', 'yayinda' => 'boolean', 'izin_tarihi' => \App\Casts\Gun::class];
     }
 
     public const TURLER = ['proje' => 'Referans proje / yönetilen site', 'yorum' => 'Müşteri görüşü'];

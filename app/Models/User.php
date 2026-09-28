@@ -61,6 +61,12 @@ class User extends Authenticatable implements FilamentUser, HasName
         return Yetki::var($izin, $this);
     }
 
+    /** Kullanıcının atandığı yönetilen siteler (site_kullanici). */
+    public function siteler(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Site::class, 'site_kullanici');
+    }
+
     public function portfoyler(): HasMany
     {
         return $this->hasMany(Portfoy::class, 'danisman_id');

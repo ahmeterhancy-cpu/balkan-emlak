@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             $this->call([
                 DemoPortfoySeeder::class,
                 DemoTalepSeeder::class,
+                DemoSiteSeeder::class,
             ]);
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Gun;
 use App\Enums\TalepDurumu;
 use App\Enums\TalepTuru;
 use App\Models\Concerns\IslemKaydeder;
@@ -30,7 +31,7 @@ class Talep extends Model
             'durum' => TalepDurumu::class,
             'detay' => 'array',
             'tercih_edilen_zaman' => 'datetime',
-            'sonraki_takip' => 'date',
+            'sonraki_takip' => Gun::class,
             'kvkk_onay' => 'boolean',
             'pazarlama_izni' => 'boolean',
             'butce_min_kurus' => 'integer',
