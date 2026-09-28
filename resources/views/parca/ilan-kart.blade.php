@@ -7,7 +7,7 @@
     <div class="ilan-kart-ust">
     <a href="{{ route('ilan.detay', $ilan) }}" class="ilan-kart-gorsel" tabindex="-1" aria-hidden="true">
         @if ($ilan->kapak)
-            <img src="{{ $ilan->kapak->kucukUrl() }}" alt="" loading="lazy" decoding="async" width="800" height="550">
+            <x-resim :yol="$ilan->kapak->yol" sizes="(min-width: 1100px) 380px, (min-width: 640px) 50vw, 100vw" :oncelikli="$oncelikli ?? false" />
         @endif
     </a>
 

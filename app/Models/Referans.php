@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\GorselSurumleri;
 use App\Models\Concerns\IslemKaydeder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class Referans extends Model
 {
-    use IslemKaydeder;
+    use GorselSurumleri, IslemKaydeder;
 
     protected $table = 'referanslar';
 

@@ -1,6 +1,6 @@
 # Balkan Emlak ve Yönetim — Durum
 
-Son güncelleme: 2026-09-28 · **149 test** yeşil
+Son güncelleme: 2026-09-28 · **152 test** yeşil
 Şartname: `balkan-emlak-ve-yonetim-proje.md` (kullanıcıdan). Canlıya çıkılmadı, uzak depo yok.
 
 ## Yerel çalıştırma
@@ -79,6 +79,26 @@ Hesaplar: siteyonetici@, muhasebe@, saha@ (`@balkanemlak.test`).
 kendi aralarında vade sırasıyla kapanır; üst çubukta kalıcı "aktif site" seçici yok (gösterge panelinde var);
 gecikme bedeli kapalı (şartname 8.2 — ayrıca kapsamlandırılacak); sakin portalı, çevrimiçi ödeme, banka
 entegrasyonu faz 3.
+
+## Hız ve erişilebilirlik ölçümü (şartname 15) — 2026-09-29
+
+Lighthouse 12, mobil profil (yavaş 4G benzetimi), yerel `artisan serve` (tek iş parçacığı, hata ayıklama açık —
+canlıdan kötümser; sıkıştırma/önbellek başlıkları canlıda `public/.htaccess` ile gelir).
+
+| Sayfa | Önce: hız / erişilebilirlik / LCP / CLS | Sonra |
+|---|---|---|
+| Ana sayfa | 79 / 89 / 5,5 sn / 0 | 97 / 100 / 2,5 sn / 0 |
+| Portföy listesi | 65 / 94 / 4,3 sn / **0,447** | 98 / 100 / 2,3 sn / 0 |
+| İlan detayı | 64 / 93 / **8,0 sn** / 0 | 99 / 100 / 2,0 sn / 0 |
+| Site yönetimi | 88 / – / 3,9 sn / 0 | 99 / 100 / 1,8 sn / 0 |
+| Teklif, portföy başvurusu, iletişim, hakkımızda, bilgi merkezi, yazı, hizmet, KVKK | – | 98–100 / 100 / 1,4–2,3 sn / 0 |
+
+Yapılanlar: duyarlı görseller (400/800/1600 + WebP, `<x-resim>`; yüklemede üretilir), kahraman ve sayfa başlığı
+görselleri CSS arka planı yerine öncelikli `<img>`, ilan galerisinde yalnız gösterilen fotoğraf iner (önce tüm galeri
+iniyordu), süzgeç kutusunun sonradan kapanmasından doğan düzen kayması giderildi, ikincil metin rengi #626d74
+(kontrast 3,77 → 5,3), metin içi bağlantılar altı çizili, kaydırıcı noktaları 24 px dokunma hedefi, başlık sırası.
+SEO puanındaki tek bulgu yerelde bilerek konan `noindex`. INP (etkileşim) laboratuvarda ölçülemez; sayfalarda uzun
+görev yok (TBT 0 ms).
 
 ## Teslim belgeleri (şartname 19)
 

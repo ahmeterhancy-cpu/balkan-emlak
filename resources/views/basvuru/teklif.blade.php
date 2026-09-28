@@ -13,7 +13,7 @@
         'baslik' => 'Yönetim Teklifi Alın',
         'aciklama' => 'Yapınızın bilgilerini ve ihtiyaçlarınızı iletin; keşif sonrasında yazılı teklifimizi hazırlayalım.',
         'kirinti' => ['Site Yönetimi' => route('yonetim.index'), 'Yönetim teklifi' => null],
-        'gorsel' => site_gorsel('yonetim_gorsel', 'varsayilan-yonetim.jpg'),
+        'gorsel' => site_gorsel_kaynak('yonetim_gorsel', 'varsayilan-yonetim.jpg'),
     ])
 
     <section class="bolum">

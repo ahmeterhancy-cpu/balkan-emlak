@@ -108,10 +108,11 @@
             <div class="kap">
                 <div class="galeri-cerceve" data-galeri>
                     <div class="galeri-ana">
+                        {{-- Gizli fotoğraflar display:none + loading=lazy: yalnız gösterilen iner (şartname 15, LCP) --}}
                         @foreach ($fotolar as $i => $foto)
-                            <img src="{{ $foto->url() }}" alt="{{ $foto->alt_metin ?: $ilan->baslik.' — fotoğraf '.($i + 1) }}"
-                                 @if ($i > 0) loading="lazy" @else fetchpriority="high" @endif decoding="async" width="1600" height="900"
-                                 class="{{ $i === 0 ? 'etkin' : '' }}" data-galeri-gorsel>
+                            <x-resim :yol="$foto->yol" :alt="$foto->alt_metin ?: $ilan->baslik.' — fotoğraf '.($i + 1)"
+                                     sizes="(min-width: 1280px) 1240px, 100vw" :oncelikli="$i === 0"
+                                     class="{{ $i === 0 ? 'etkin' : '' }}" data-galeri-gorsel />
                         @endforeach
                         @if ($fotolar->count() > 1)
                             <button type="button" class="kaydirici-ok onceki" data-onceki aria-label="Önceki fotoğraf"><x-simge ad="sol" /></button>
@@ -123,7 +124,7 @@
                         <div class="galeri-kucukler">
                             @foreach ($fotolar as $i => $foto)
                                 <button type="button" data-galeri-kucuk="{{ $i }}" aria-label="Fotoğraf {{ $i + 1 }}" @if ($i === 0) aria-current="true" @endif>
-                                    <img src="{{ $foto->kucukUrl() }}" alt="" loading="lazy" width="110" height="82">
+                                    <x-resim :yol="$foto->yol" sizes="110px" />
                                 </button>
                             @endforeach
                         </div>

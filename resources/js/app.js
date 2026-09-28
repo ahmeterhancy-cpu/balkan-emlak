@@ -171,9 +171,8 @@ function kaydirmaDinle(el, ileri, geri) {
         });
     });
 
-    // Mobilde süzgeç kutusu kapalı başlasın (JS yoksa açık kalır)
-    const kutu = $('[data-suzgec]');
-    if (kutu && window.matchMedia('(max-width: 991px)').matches) kutu.open = false;
+    // Süzgeç kutusu HTML'de kapalı gelir (masaüstünde CSS açık gösterir). Önceden JS ile
+    // sonradan kapatılıyordu: mobilde 0,45'lik düzen kayması (CLS) yapıyordu.
 })();
 
 /* Sıralama değişince listeyi yenile */
@@ -214,10 +213,9 @@ $$('[data-galeri]').forEach((kok) => {
 
     const git = (i) => {
         simdiki = (i + gorseller.length) % gorseller.length;
-        gorseller.forEach((g, j) => {
-            g.classList.toggle('etkin', j === simdiki);
-            if (j === simdiki) g.loading = 'eager';
-        });
+        gorseller.forEach((g, j) => g.classList.toggle('etkin', j === simdiki));
+        // Sıradakini arka planda hazırla (gizli olduğu için kendiliğinden inmez)
+        gorseller[(simdiki + 1) % gorseller.length].loading = 'eager';
         kucukler.forEach((k, j) => (j === simdiki ? k.setAttribute('aria-current', 'true') : k.removeAttribute('aria-current')));
         const kucuk = kucukler[simdiki];
         if (kucuk) kucuk.parentElement.scrollTo({ left: kucuk.offsetLeft - 40, behavior: 'smooth' });

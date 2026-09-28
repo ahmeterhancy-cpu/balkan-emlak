@@ -112,6 +112,13 @@ class Ayar extends Model
         }
 
         static::onbellegiTemizle();
+
+        // Site görsellerinin duyarlı sürümlerini hemen üret (ilk ziyaretçi beklemesin)
+        foreach (['logo', 'logo_acik', 'hero_gorsel', 'cta_gorsel', 'yonetim_gorsel'] as $gorsel) {
+            if (filled($degerler[$gorsel] ?? null)) {
+                \App\Support\Gorsel::set((string) $degerler[$gorsel]);
+            }
+        }
     }
 
     public static function onbellegiTemizle(): void

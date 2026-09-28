@@ -24,7 +24,8 @@
                 </div>
             </div>
             <div class="ilkeler-gorsel">
-                <img src="{{ site_gorsel('yonetim_gorsel', 'varsayilan-ilkeler.jpg') }}" alt="" loading="lazy" width="1600" height="1100">
+                @php $ilke = site_gorsel_kaynak('yonetim_gorsel', 'varsayilan-ilkeler.jpg'); @endphp
+                <x-resim :yol="$ilke[0]" :kok="$ilke[1]" sizes="(min-width: 992px) 600px, 100vw" />
             </div>
         </div>
     </section>

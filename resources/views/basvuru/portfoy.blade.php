@@ -10,7 +10,7 @@
         'baslik' => 'Gayrimenkulünüzü Bize Bırakın',
         'aciklama' => 'Satış ya da kiralama için gayrimenkulünüzün bilgilerini iletin; danışmanımız sizi arayarak birlikte değerlendirsin.',
         'kirinti' => ['Emlak Portföyü' => route('emlak.index'), 'Portföy başvurusu' => null],
-        'gorsel' => site_gorsel('cta_gorsel', 'varsayilan-cagri.jpg'),
+        'gorsel' => site_gorsel_kaynak('cta_gorsel', 'varsayilan-cagri.jpg'),
     ])
 
     <section class="bolum">

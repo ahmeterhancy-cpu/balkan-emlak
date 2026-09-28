@@ -11,7 +11,7 @@
         'baslik' => $hizmet->baslik,
         'aciklama' => $hizmet->ozet,
         'kirinti' => ['Site Yönetimi' => route('yonetim.index'), $hizmet->baslik => null],
-        'gorsel' => site_gorsel('yonetim_gorsel', 'varsayilan-yonetim.jpg'),
+        'gorsel' => site_gorsel_kaynak('yonetim_gorsel', 'varsayilan-yonetim.jpg'),
     ])
 
     <section class="bolum">
@@ -19,7 +19,7 @@
             <div>
                 <div class="kutu">
                     @if ($hizmet->gorselUrl())
-                        <img class="hizmet-bas-gorsel" src="{{ $hizmet->gorselUrl() }}" alt="" width="1600" height="800">
+                        <x-resim :yol="$hizmet->gorsel" class="hizmet-bas-gorsel" sizes="(min-width: 992px) 800px, 100vw" />
                     @endif
                     <div style="display:flex;gap:14px;align-items:center;margin-bottom:18px">
                         <span class="hizmet-simge" style="margin:0"><x-simge :ad="$hizmet->ikon ?: 'yonetim'" /></span>

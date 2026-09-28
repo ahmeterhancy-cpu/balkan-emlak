@@ -55,7 +55,7 @@
 .etkin-suzgecler a {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 5px 10px; border-radius: 20px;
-    background: var(--yesil-zemin); color: var(--yesil-koyu); font-size: 13px; font-weight: 500;
+    background: var(--yesil-zemin); color: #4a650c; font-size: 13px; font-weight: 500;
 }
 .etkin-suzgecler a:hover { background: var(--yesil-koyu); color: #fff; }
 .etkin-suzgecler .simge { width: 13px; height: 13px; }
@@ -77,10 +77,12 @@
 .galeri { background: #fff; padding-bottom: 32px; }
 .galeri-ana { position: relative; aspect-ratio: 16 / 9; background: var(--lacivert); border-radius: var(--radius); overflow: hidden; }
 @media (min-width: 992px) { .galeri-ana { aspect-ratio: 21 / 9; } }
-.galeri-ana img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .35s ease; }
-.galeri-ana img.etkin { opacity: 1; }
-.galeri-ana img:first-child { opacity: 1; } /* JS yokken ilk görsel görünür */
-.js .galeri-ana img:first-child:not(.etkin) { opacity: 0; }
+/* Yalnız etkin fotoğraf gösterilir; gizliler display:none olduğu için loading=lazy onları İNDİRMEZ.
+   (Önceki üst üste binen opacity:0 düzeninde tüm galeri ilk açılışta iniyordu — 1,3 MB fazla, LCP 8 sn.)
+   JS yokken sunucu ilk fotoğrafı "etkin" işaretler. */
+.galeri-ana img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.galeri-ana img.etkin { display: block; animation: galeri-belir .35s ease; }
+@keyframes galeri-belir { from { opacity: .35; } to { opacity: 1; } }
 .galeri-sayac { position: absolute; right: 14px; bottom: 14px; z-index: 2; }
 .galeri .kaydirici-ok { top: 50%; transform: translateY(-50%); }
 .galeri .kaydirici-ok.onceki { left: 14px; }

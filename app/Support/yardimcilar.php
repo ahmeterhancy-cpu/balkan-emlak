@@ -59,3 +59,16 @@ if (! function_exists('site_gorsel')) {
         return $yol ? Illuminate\Support\Facades\Storage::disk('medya')->url($yol) : asset('img/'.$varsayilan);
     }
 }
+
+if (! function_exists('site_gorsel_kaynak')) {
+    /**
+     * <x-resim> için site görseli kaynağı: panelden yüklendiyse medya diski,
+     * yoksa public/img altındaki varsayılan. @return array{0: string, 1: string} [yol, kök]
+     */
+    function site_gorsel_kaynak(string $anahtar, string $varsayilan): array
+    {
+        $yol = ayar($anahtar);
+
+        return $yol ? [$yol, 'medya'] : ['img/'.$varsayilan, 'public'];
+    }
+}

@@ -30,7 +30,7 @@
         <div class="kap iki-sutun sol-yan">
             {{-- Süzgeçler (mobilde katlanır) --}}
             <aside>
-                <details class="suzgec" data-suzgec open>
+                <details class="suzgec" data-suzgec>
                     <summary><span><x-simge ad="suzgec" /> Süzgeçler @if (count($etiketler)) ({{ count($etiketler) }}) @endif</span><x-simge ad="asagi" /></summary>
                     <form class="suzgec-govde" action="{{ route('emlak.index') }}" method="get" data-suzgec-form data-konum-agaci='@json($konumAgaci)' data-tipler='@json($tipler)'>
                         <div class="alan">
@@ -185,9 +185,10 @@
                         </div>
                     </div>
                 @else
+                    <h2 class="gorunmez">İlanlar</h2>
                     <div class="ilan-izgara">
                         @foreach ($ilanlar as $ilan)
-                            @include('parca.ilan-kart', ['ilan' => $ilan])
+                            @include('parca.ilan-kart', ['ilan' => $ilan, 'oncelikli' => $loop->index < 2])
                         @endforeach
                     </div>
                     {{ $ilanlar->links() }}

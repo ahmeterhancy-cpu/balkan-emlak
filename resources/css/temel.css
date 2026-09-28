@@ -26,7 +26,7 @@
     --kart: #ffffff;
     --metin: #18232d;
     --metin-2: #5b6770;
-    --metin-3: #7a858c;
+    --metin-3: #626d74; /* beyazda 5,3:1 — önceki #7a858c 3,77:1 ile AA'yı geçmiyordu (Lighthouse) */
     --cizgi: #e2e7e1;
     --cizgi-koyu: #cfd6ce;
     --hata: #b42318;
@@ -75,6 +75,11 @@ body {
 }
 
 img, svg, video, iframe { display: block; max-width: 100%; }
+/* <x-resim> <picture> sarmalayıcısı düzeni etkilemesin: img doğrudan kabın çocuğu gibi davranır */
+picture { display: contents; }
+
+/* Görsel zeminli bölümler: arka plan CSS değil <img> (erken keşif, WebP, srcset — LCP) */
+.arka-resim { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
 img { height: auto; }
 
 h1, h2, h3, h4 {
@@ -208,6 +213,9 @@ a:hover { color: var(--lacivert); }
     display: flex; gap: 10px; align-items: flex-start;
     font-size: 14px; color: var(--metin-2);
 }
+/* Metin içindeki bağlantı yalnız renkle ayırt edilmesin (WCAG 1.4.1) */
+.onay a, .alan-ipucu a, .bildirim a { text-decoration: underline; text-underline-offset: 2px; }
+
 .onay input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--yesil-koyu); flex: none; }
 
 .onay-grup { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }

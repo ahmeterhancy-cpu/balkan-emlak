@@ -182,7 +182,8 @@
     content: ''; position: absolute; inset: 0;
     background: linear-gradient(90deg, rgba(14, 34, 48, .9), rgba(20, 45, 62, .62));
 }
-.sayfa-basi > .kap { position: relative; }
+.sayfa-basi::before { z-index: 1; }
+.sayfa-basi > .kap { position: relative; z-index: 2; }
 .sayfa-basi h1 { color: #fff; margin: 0; }
 .sayfa-basi p { margin: 10px 0 0; max-width: 680px; color: rgba(255, 255, 255, .85); font-size: 16px; }
 
@@ -216,7 +217,7 @@
     background: var(--yesil);
 }
 .bolum-baslik p { margin: 16px 0 0; color: var(--metin-2); }
-.bolum-baslik .ust-yazi { display: block; margin-bottom: 8px; color: var(--yesil-koyu); font-size: 13px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; }
+.bolum-baslik .ust-yazi { display: block; margin-bottom: 8px; color: #4a650c; /* gri zeminde de ≥ 4,5:1 */ font-size: 13px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; }
 
 .bolum-baslik.sola { text-align: left; margin-left: 0; }
 .bolum-baslik.sola h2::after { margin-left: 0; }

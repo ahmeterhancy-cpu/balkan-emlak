@@ -22,11 +22,12 @@
             @if ($yazilar->isEmpty())
                 <div class="bos-durum"><x-simge ad="belge" /><h2>Henüz yazı yok</h2><p>Bu kategoride yayımlanmış yazı bulunmuyor.</p></div>
             @else
+                <h2 class="gorunmez">Yazılar</h2>
                 <div class="yazi-izgara">
                     @foreach ($yazilar as $yazi)
                         <article class="yazi-kart">
                             @if ($yazi->gorselUrl())
-                                <img src="{{ $yazi->gorselUrl() }}" alt="" loading="lazy" width="800" height="450">
+                                <x-resim :yol="$yazi->gorsel" sizes="(min-width: 1100px) 400px, (min-width: 640px) 50vw, 100vw" />
                             @endif
                             <div class="govde">
                                 <div class="ust-bilgi">{{ \App\Models\Yazi::KATEGORILER[$yazi->kategori] ?? '' }} · {{ tarih_tr($yazi->yayin_tarihi) }}</div>

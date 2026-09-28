@@ -38,7 +38,7 @@ class PortfoyMedya extends Model
         // Kayıt silinince dosya da silinir (başka kayıt aynı dosyayı kullanmıyorsa)
         static::deleted(function (PortfoyMedya $m) {
             if ($m->yol && ! static::where('yol', $m->yol)->exists()) {
-                Storage::disk('medya')->delete([$m->yol, Gorsel::kucukYol($m->yol)]);
+                Storage::disk('medya')->delete([$m->yol, ...Gorsel::surumYollari($m->yol)]);
             }
         });
     }

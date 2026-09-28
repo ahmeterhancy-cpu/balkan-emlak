@@ -33,7 +33,7 @@
                 <span>{{ $yazi->okumaSuresi() }} dk okuma</span>
             </div>
             @if ($yazi->gorselUrl())
-                <img class="kapak" src="{{ $yazi->gorselUrl() }}" alt="{{ $yazi->gorsel_alt ?: '' }}" width="1600" height="800">
+                <x-resim :yol="$yazi->gorsel" :alt="$yazi->gorsel_alt ?: ''" class="kapak" sizes="(min-width: 860px) 820px, 100vw" :oncelikli="true" />
             @endif
             <div class="kutu icerik-metni">{!! \App\Support\Html::temizle($yazi->icerik) !!}</div>
         </article>
@@ -46,7 +46,7 @@
                 <div class="yazi-izgara">
                     @foreach ($digerleri as $d)
                         <article class="yazi-kart">
-                            @if ($d->gorselUrl())<img src="{{ $d->gorselUrl() }}" alt="" loading="lazy" width="800" height="450">@endif
+                            @if ($d->gorsel)<x-resim :yol="$d->gorsel" sizes="(min-width: 1100px) 400px, (min-width: 640px) 50vw, 100vw" />@endif
                             <div class="govde">
                                 <div class="ust-bilgi">{{ tarih_tr($d->yayin_tarihi) }}</div>
                                 <h3><a href="{{ route('bilgi.detay', $d) }}">{{ $d->baslik }}</a></h3>

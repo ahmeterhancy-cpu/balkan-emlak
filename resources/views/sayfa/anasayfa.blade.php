@@ -17,7 +17,9 @@
 
 @section('icerik')
     {{-- 1. Kahraman: marka mesajı, iki ana düğme, hızlı arama --}}
-    <section class="kahraman" style="background-image:url('{{ site_gorsel('hero_gorsel', 'varsayilan-kahraman.jpg') }}')">
+    @php $kahraman = site_gorsel_kaynak('hero_gorsel', 'varsayilan-kahraman.jpg'); @endphp
+    <section class="kahraman">
+        <x-resim :yol="$kahraman[0]" :kok="$kahraman[1]" class="arka-resim" sizes="100vw" :oncelikli="true" />
         <div class="kap">
             <div class="kahraman-metin">
                 <div class="kahraman-ust"><span>Emlak</span><span>Site ve Apartman Yönetimi</span></div>
@@ -127,7 +129,9 @@
     @endif
 
     {{-- 3. Portföy başvurusu çağrısı --}}
-    <section class="cagri" style="background-image:url('{{ site_gorsel('cta_gorsel', 'varsayilan-cagri.jpg') }}')">
+    @php $cagri = site_gorsel_kaynak('cta_gorsel', 'varsayilan-cagri.jpg'); @endphp
+    <section class="cagri">
+        <x-resim :yol="$cagri[0]" :kok="$cagri[1]" class="arka-resim" sizes="100vw" />
         <div class="kap">
             <h2>Gayrimenkulünüzü satmak ya da kiraya vermek mi istiyorsunuz?</h2>
             <p>Bilgilerinizi bırakın; danışmanımız gayrimenkulünüzü birlikte değerlendirmek, fotoğraf ve ilan hazırlığını planlamak için sizi arasın.</p>
@@ -153,7 +157,7 @@
                                 <article class="one-cikan">
                                     <a href="{{ route('ilan.detay', $ilan) }}" class="one-cikan-gorsel" tabindex="-1" aria-hidden="true">
                                         @if ($ilan->kapak)
-                                            <img src="{{ $ilan->kapak->url() }}" alt="" loading="lazy" decoding="async" width="1600" height="900">
+                                            <x-resim :yol="$ilan->kapak->yol" sizes="(min-width: 1280px) 1200px, 100vw" />
                                         @endif
                                     </a>
                                     <div class="one-cikan-kart">
@@ -255,7 +259,8 @@
     <section class="bolum bolum-beyaz">
         <div class="kap ilkeler">
             <div class="ilkeler-gorsel">
-                <img src="{{ site_gorsel('yonetim_gorsel', 'varsayilan-ilkeler.jpg') }}" alt="" loading="lazy" width="1600" height="1100">
+                @php $ilke = site_gorsel_kaynak('yonetim_gorsel', 'varsayilan-ilkeler.jpg'); @endphp
+                <x-resim :yol="$ilke[0]" :kok="$ilke[1]" sizes="(min-width: 992px) 600px, 100vw" />
                 <div class="rozet-kutu">
                     <strong>Tek marka, iki uzmanlık</strong>
                     <span>Emlak danışmanlığı ve profesyonel yönetim</span>
@@ -324,7 +329,9 @@
         $kisiler = collect(ayar('iletisim_kisileri', []))->filter(fn ($k) => filled($k['telefon'] ?? null));
         $hatalar = $errors->kisa;
     @endphp
-    <section class="form-bolumu" id="kisa-talep" style="background-image:url('{{ site_gorsel('cta_gorsel', 'varsayilan-form.jpg') }}')">
+    @php $formArka = site_gorsel_kaynak('cta_gorsel', 'varsayilan-form.jpg'); @endphp
+    <section class="form-bolumu" id="kisa-talep">
+        <x-resim :yol="$formArka[0]" :kok="$formArka[1]" class="arka-resim" sizes="100vw" />
         <div class="kap">
             <div class="form-kart">
                 <h2>Size ulaşalım</h2>

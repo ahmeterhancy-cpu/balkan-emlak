@@ -9,7 +9,7 @@
         'baslik' => 'Site ve Apartman Yönetimi',
         'aciklama' => ayar('yonetim_slogani').' Ortak alanların bakımından aidat takibine kadar yönetimin her adımı kayıt altında.',
         'kirinti' => ['Site Yönetimi' => null],
-        'gorsel' => site_gorsel('yonetim_gorsel', 'varsayilan-yonetim.jpg'),
+        'gorsel' => site_gorsel_kaynak('yonetim_gorsel', 'varsayilan-yonetim.jpg'),
     ])
 
     <section class="bolum bolum-gri">
@@ -50,7 +50,8 @@
     <section class="bolum">
         <div class="kap ilkeler">
             <div class="ilkeler-gorsel">
-                <img src="{{ site_gorsel('yonetim_gorsel', 'varsayilan-yonetim.jpg') }}" alt="" loading="lazy" width="1600" height="1100">
+                @php $ilke = site_gorsel_kaynak('yonetim_gorsel', 'varsayilan-yonetim.jpg'); @endphp
+                <x-resim :yol="$ilke[0]" :kok="$ilke[1]" sizes="(min-width: 992px) 600px, 100vw" />
                 <div class="rozet-kutu">
                     <strong>{{ ayar('yonetim_slogani') }}</strong>
                 </div>
@@ -83,7 +84,7 @@
                     @foreach ($projeler as $proje)
                         <article class="proje-kart">
                             @if ($proje->gorselUrl())
-                                <img src="{{ $proje->gorselUrl() }}" alt="{{ $proje->ad }}" loading="lazy">
+                                <x-resim :yol="$proje->gorsel" :alt="$proje->ad" sizes="(min-width: 1100px) 400px, 100vw" />
                             @endif
                             <div class="govde"><h3>{{ $proje->ad }}</h3>@if ($proje->alt_baslik)<p style="margin:0">{{ $proje->alt_baslik }}</p>@endif</div>
                         </article>
@@ -112,7 +113,9 @@
         </section>
     @endif
 
-    <section class="cagri" style="background-image:url('{{ site_gorsel('cta_gorsel', 'varsayilan-cagri.jpg') }}')">
+    @php $cagri = site_gorsel_kaynak('cta_gorsel', 'varsayilan-cagri.jpg'); @endphp
+    <section class="cagri">
+        <x-resim :yol="$cagri[0]" :kok="$cagri[1]" class="arka-resim" sizes="100vw" />
         <div class="kap">
             <h2>Siteniz ya da apartmanınız için teklif alın</h2>
             <p>Blok ve bağımsız bölüm sayısını, ihtiyaç duyduğunuz hizmetleri iletin; keşif sonrasında yazılı teklifimizi hazırlayalım.</p>

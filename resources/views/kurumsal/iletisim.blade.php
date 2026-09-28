@@ -17,6 +17,7 @@
 
     <section class="bolum" style="padding-bottom:0">
         <div class="kap">
+            <h2 class="gorunmez">İletişim bilgileri</h2>
             <div class="iletisim-izgara">
                 @foreach ($kisiler as $kisi)
                     <div class="iletisim-kart">

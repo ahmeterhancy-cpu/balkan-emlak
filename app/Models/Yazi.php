@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\GorselSurumleri;
 use App\Models\Concerns\IslemKaydeder;
 use App\Models\Concerns\SlugYonlendirmesi;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,7 +14,7 @@ use Illuminate\Support\Str;
 /** Bilgi merkezi yazısı. Taslak → yayında → arşiv. */
 class Yazi extends Model
 {
-    use IslemKaydeder, SlugYonlendirmesi;
+    use GorselSurumleri, IslemKaydeder, SlugYonlendirmesi;
 
     public function vitrinYolu(string $slug): string
     {

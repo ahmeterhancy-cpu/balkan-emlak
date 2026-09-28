@@ -24,7 +24,7 @@
                     @foreach ($projeler as $proje)
                         <article class="proje-kart">
                             @if ($proje->gorselUrl())
-                                <img src="{{ $proje->gorselUrl() }}" alt="{{ $proje->ad }}" loading="lazy">
+                                <x-resim :yol="$proje->gorsel" :alt="$proje->ad" sizes="(min-width: 1100px) 400px, 100vw" />
                             @endif
                             <div class="govde">
                                 <h3>{{ $proje->ad }}</h3>
