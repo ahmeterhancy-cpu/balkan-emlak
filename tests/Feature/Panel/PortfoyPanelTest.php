@@ -10,6 +10,7 @@ use App\Filament\Resources\Portfoyler\PortfoyResource;
 use App\Models\FiyatGecmisi;
 use App\Models\Portfoy;
 use App\Models\PortfoyMedya;
+use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -163,6 +164,13 @@ class PortfoyPanelTest extends TestCase
         $p->refresh();
         $this->assertSame(YayinDurumu::Yayinda, $p->yayin_durumu);
         $this->assertNotNull($p->yayin_tarihi);
+
+        if (Route::has('ilan.onizleme') && Route::has('ilan.detay')) {
+            Livewire::test(EditPortfoy::class, ['record' => $p->getRouteKey()])
+                ->assertActionHasUrl('onizle', route('ilan.onizleme', $p->id))
+                ->assertActionHasUrl('sitedeGor', route('ilan.detay', $p))
+                ->assertActionShouldOpenUrlInNewTab('onizle');
+        }
 
         Livewire::test(EditPortfoy::class, ['record' => $p->getRouteKey()])
             ->callAction('yayindanKaldir');
