@@ -1,0 +1,62 @@
+{
+  "_fonts-CC03sL2J.css": {
+    "file": "assets/fonts-CC03sL2J.css",
+    "src": "_fonts-CC03sL2J.css"
+  },
+  "_rubik-400-normal-BV1Ho3GG.woff": {
+    "file": "assets/rubik-400-normal-BV1Ho3GG.woff",
+    "src": "_rubik-400-normal-BV1Ho3GG.woff"
+  },
+  "_rubik-400-normal-j0pmKyiQ.woff2": {
+    "file": "assets/rubik-400-normal-j0pmKyiQ.woff2",
+    "src": "_rubik-400-normal-j0pmKyiQ.woff2"
+  },
+  "_rubik-500-normal-1os41rQk.woff2": {
+    "file": "assets/rubik-500-normal-1os41rQk.woff2",
+    "src": "_rubik-500-normal-1os41rQk.woff2"
+  },
+  "_rubik-500-normal-LZYVHeqz.woff": {
+    "file": "assets/rubik-500-normal-LZYVHeqz.woff",
+    "src": "_rubik-500-normal-LZYVHeqz.woff"
+  },
+  "_rubik-600-normal-7iWW07_k.woff2": {
+    "file": "assets/rubik-600-normal-7iWW07_k.woff2",
+    "src": "_rubik-600-normal-7iWW07_k.woff2"
+  },
+  "_rubik-600-normal-Bd1rsTk4.woff": {
+    "file": "assets/rubik-600-normal-Bd1rsTk4.woff",
+    "src": "_rubik-600-normal-Bd1rsTk4.woff"
+  },
+  "_rubik-700-normal-D-tMm-eS.woff2": {
+    "file": "assets/rubik-700-normal-D-tMm-eS.woff2",
+    "src": "_rubik-700-normal-D-tMm-eS.woff2"
+  },
+  "_rubik-700-normal-KHOtubUA.woff": {
+    "file": "assets/rubik-700-normal-KHOtubUA.woff",
+    "src": "_rubik-700-normal-KHOtubUA.woff"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-fZqJn4bH.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/panel.css": {
+    "file": "assets/panel-BEnUYKLQ.css",
+    "name": "panel",
+    "names": [
+      "panel.css"
+    ],
+    "src": "resources/css/panel.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BowrKSN7.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}
