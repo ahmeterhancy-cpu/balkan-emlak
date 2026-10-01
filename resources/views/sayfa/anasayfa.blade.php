@@ -109,7 +109,37 @@
         </div>
     </section>
 
-    {{-- 2. Son eklenen ilanlar --}}
+    {{-- 2. Site ve apartman yönetimi hizmetleri --}}
+    @if ($hizmetler->isNotEmpty())
+        <section class="bolum bolum-gri" id="site-yonetimi">
+            <div class="kap">
+                <div class="bolum-baslik">
+                    <span class="ust-yazi">{{ ayar('alt_marka') }}</span>
+                    <h2>Site ve Apartman Yönetimi</h2>
+                    <p>Ortak alanların bakımından aidat takibine kadar yönetimin her adımı kayıt altında ve raporlanır.</p>
+                </div>
+                <div class="hizmet-izgara">
+                    @foreach ($hizmetler as $hizmet)
+                        <article class="hizmet-kart">
+                            <span class="hizmet-simge"><x-simge :ad="$hizmet->ikon ?: 'yonetim'" /></span>
+                            <h3><a href="{{ route('yonetim.hizmet', $hizmet) }}">{{ $hizmet->baslik }}</a></h3>
+                            <p>{{ $hizmet->ozet }}</p>
+                            <span class="devam">Detaylı bilgi <x-simge ad="ok" /></span>
+                        </article>
+                    @endforeach
+                </div>
+                <div class="yonetim-slogan">
+                    <div>
+                        <strong>{{ ayar('yonetim_slogani') }}</strong>
+                        <p>Sitenizin ya da apartmanınızın ihtiyaçlarını dinleyelim, keşif sonrasında yazılı teklifimizi hazırlayalım.</p>
+                    </div>
+                    <a href="{{ route('yonetim.teklif') }}" class="dgm">Yönetim Teklifi Al</a>
+                </div>
+            </div>
+        </section>
+    @endif
+
+    {{-- 3. Son eklenen ilanlar --}}
     @if ($sonIlanlar->isNotEmpty())
         <section class="bolum bolum-beyaz">
             <div class="kap">
@@ -129,7 +159,7 @@
         </section>
     @endif
 
-    {{-- 3. Portföy başvurusu çağrısı --}}
+    {{-- 4. Portföy başvurusu çağrısı --}}
     @php $cagri = site_gorsel_kaynak('cta_gorsel', 'varsayilan-cagri.jpg'); @endphp
     <section class="cagri">
         <x-resim :yol="$cagri[0]" :kok="$cagri[1]" class="arka-resim" sizes="100vw" />
@@ -143,7 +173,7 @@
         </div>
     </section>
 
-    {{-- 4. Öne çıkan ilanlar --}}
+    {{-- 5. Öne çıkan ilanlar --}}
     @if ($oneCikanlar->isNotEmpty())
         <section class="bolum">
             <div class="kap">
@@ -203,7 +233,7 @@
         </section>
     @endif
 
-    {{-- 5. Gayrimenkul kategorileri (yalnız ilanı olanlar) --}}
+    {{-- 6. Gayrimenkul kategorileri (yalnız ilanı olanlar) --}}
     @if ($kategoriler->count() > 1)
         <section class="bolum bolum-beyaz">
             <div class="kap">
@@ -226,38 +256,8 @@
         </section>
     @endif
 
-    {{-- 6. Site ve apartman yönetimi hizmetleri --}}
-    @if ($hizmetler->isNotEmpty())
-        <section class="bolum bolum-gri" id="site-yonetimi">
-            <div class="kap">
-                <div class="bolum-baslik">
-                    <span class="ust-yazi">{{ ayar('alt_marka') }}</span>
-                    <h2>Site ve Apartman Yönetimi</h2>
-                    <p>Ortak alanların bakımından aidat takibine kadar yönetimin her adımı kayıt altında ve raporlanır.</p>
-                </div>
-                <div class="hizmet-izgara">
-                    @foreach ($hizmetler as $hizmet)
-                        <article class="hizmet-kart">
-                            <span class="hizmet-simge"><x-simge :ad="$hizmet->ikon ?: 'yonetim'" /></span>
-                            <h3><a href="{{ route('yonetim.hizmet', $hizmet) }}">{{ $hizmet->baslik }}</a></h3>
-                            <p>{{ $hizmet->ozet }}</p>
-                            <span class="devam">Detaylı bilgi <x-simge ad="ok" /></span>
-                        </article>
-                    @endforeach
-                </div>
-                <div class="yonetim-slogan">
-                    <div>
-                        <strong>{{ ayar('yonetim_slogani') }}</strong>
-                        <p>Sitenizin ya da apartmanınızın ihtiyaçlarını dinleyelim, keşif sonrasında yazılı teklifimizi hazırlayalım.</p>
-                    </div>
-                    <a href="{{ route('yonetim.teklif') }}" class="dgm">Yönetim Teklifi Al</a>
-                </div>
-            </div>
-        </section>
-    @endif
-
     {{-- 7. Çalışma ilkeleri --}}
-    <section class="bolum bolum-beyaz">
+    <section class="bolum bolum-gri">
         <div class="kap ilkeler">
             <div class="ilkeler-gorsel">
                 @php $ilke = site_gorsel_kaynak('yonetim_gorsel', 'varsayilan-ilkeler.jpg'); @endphp
