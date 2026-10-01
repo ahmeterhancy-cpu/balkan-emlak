@@ -10,7 +10,9 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Widgets\AccountWidget;
+use Filament\Auth\Pages\Login;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Support\HtmlString;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -27,6 +29,11 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // Giriş sayfası: solda marka alanı, formun altında siteye dönüş bağlantısı
+            ->renderHook(PanelsRenderHook::SIMPLE_LAYOUT_START, fn () => view('filament.giris-yan'), scopes: Login::class)
+            ->renderHook(PanelsRenderHook::AUTH_LOGIN_FORM_AFTER, fn () => new HtmlString(
+                '<p class="giris-siteye"><a href="'.e(route('anasayfa')).'">← Web sitesine dön</a></p>'
+            ), scopes: Login::class)
             ->brandName(fn (): string => (string) Ayar::al('firma_adi', 'Balkan Emlak ve Yönetim'))
             ->colors([
                 /*

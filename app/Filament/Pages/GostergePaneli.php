@@ -25,9 +25,9 @@ class GostergePaneli extends Dashboard
 {
     use HasFiltersForm;
 
-    protected static ?string $title = 'Gösterge Paneli';
+    protected static ?string $title = 'Panel';
 
-    protected static ?string $navigationLabel = 'Gösterge Paneli';
+    protected static ?string $navigationLabel = 'Panel';
 
     public function getColumns(): int|array
     {

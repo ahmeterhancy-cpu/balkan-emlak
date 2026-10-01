@@ -16,13 +16,13 @@ değişir; görmediğiniz bir ekran için yetkiniz yoktur (ayrıntı: [Yetki tab
 
 | Rol | Ne yapar | Başlangıç ekranı |
 |---|---|---|
-| Sistem yöneticisi | Her şey; kullanıcılar ve site ayarları | Gösterge Paneli |
-| Şirket yöneticisi | Emlak ve site yönetiminin tamamı, ilan yayını, limit üstü gider onayı, dönem düzeltme | Gösterge Paneli |
+| Sistem yöneticisi | Her şey; kullanıcılar ve site ayarları | Panel |
+| Şirket yöneticisi | Emlak ve site yönetiminin tamamı, ilan yayını, limit üstü gider onayı, dönem düzeltme | Panel |
 | Emlak danışmanı | Kendi portföyleri, kendisine atanan talepler, randevular | Portföyler ve İlanlar |
 | İçerik editörü | Sayfalar, hizmetler, bilgi merkezi, referanslar, SSS, yönlendirmeler | Web İçerikleri |
-| Site yöneticisi | Atandığı sitelerin yapısı, operasyonu, giderleri (limit içi onay), raporları | Gösterge Paneli |
+| Site yöneticisi | Atandığı sitelerin yapısı, operasyonu, giderleri (limit içi onay), raporları | Panel |
 | Muhasebe sorumlusu | Atandığı sitelerde borçlandırma, tahsilat, gider ödemesi, kasa/banka, dönem kapama | Tahsilatlar |
-| Saha personeli | Kendisine atanan iş emirleri ve görevler | Gösterge Paneli ("Açık iş emirlerim") |
+| Saha personeli | Kendisine atanan iş emirleri ve görevler | Panel ("Açık iş emirlerim") |
 
 ---
 

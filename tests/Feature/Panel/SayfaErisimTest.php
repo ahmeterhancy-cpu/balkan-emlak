@@ -58,7 +58,7 @@ class SayfaErisimTest extends TestCase
             'kullanicilar' => $yonetici,
         ];
 
-        $this->get('/admin')->assertOk()->assertSee('Gösterge Paneli');
+        $this->get('/admin')->assertOk()->assertSee('Panel');
 
         foreach ($kayitlar as $yol => $kayit) {
             $this->get("/admin/$yol")->assertOk();
