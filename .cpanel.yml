@@ -16,9 +16,9 @@
 #  - Günlük: ~/deploy-balkan.log  (cPanel hata göstermez; Dosya Yöneticisi'nden bakın)
 deployment:
   tasks:
-    - export WEBROOT=/home/KULLANICI/public_html
-    - export APPPATH=/home/KULLANICI/public_html/balkan_app
-    - export LOG=/home/KULLANICI/deploy-balkan.log
+    - export WEBROOT=/home/balk1576/public_html
+    - export APPPATH=/home/balk1576/public_html/balkan_app
+    - export LOG=/home/balk1576/deploy-balkan.log
     - export PHPBIN=$(command -v php || echo /opt/cpanel/ea-php83/root/usr/bin/php)
     - date > $LOG 2>&1
     - echo "PHPBIN=$PHPBIN APPPATH=$APPPATH WEBROOT=$WEBROOT" >> $LOG 2>&1

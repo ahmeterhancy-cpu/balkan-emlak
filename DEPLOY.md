@@ -38,7 +38,7 @@ ilan fotoğrafları `public_html/medya`'ya yazılır ve **deploy onlara dokunmaz
    (APP_KEY yerelde `php artisan key:generate --show`; `ILK_YONETICI_*` ilk yönetici için).
    İlk deploy'dan önce `balkan_app` klasörü yoksa elle oluşturun.
 6. cPanel → Cron Jobs, her dakika:
-   `/usr/local/bin/php /home/KULLANICI/public_html/balkan_app/artisan schedule:run >> /dev/null 2>&1`
+   `/usr/local/bin/php /home/balk1576/public_html/balkan_app/artisan schedule:run >> /dev/null 2>&1`
    (yedek her gece 03.15, doğrulama her pazar 04.30).
 
 **Her yayın:**
