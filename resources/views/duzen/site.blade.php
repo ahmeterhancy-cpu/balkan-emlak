@@ -288,6 +288,7 @@
                     <li><a href="{{ route('sayfa', 'gizlilik-politikasi') }}">Gizlilik</a></li>
                     <li><a href="{{ route('sayfa', 'cerez-politikasi') }}">Çerez Politikası</a></li>
                 </ul>
+                <p class="imza">Web site by <a href="https://maysila.com" target="_blank" rel="noopener">Maysila Digital Agency</a> &amp; <a href="https://amesis.com.tr" target="_blank" rel="noopener">Amesis 360</a></p>
             </div>
         </div>
     </footer>

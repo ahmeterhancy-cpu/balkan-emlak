@@ -260,6 +260,12 @@
 .alt-alt { border-top: 1px solid rgba(255, 255, 255, .1); padding: 18px 0; font-size: 13.5px; }
 .alt-alt .kap { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
 .alt-alt ul { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; }
+.alt-alt .imza { flex-basis: 100%; margin: 0; font-size: 12.5px; color: rgba(255, 255, 255, .6); }
+.alt-alt .imza a { color: rgba(255, 255, 255, .85); }
+.alt-alt .imza a:hover { color: #fff; }
+/* Sağ alttaki "yukarı" düğmesi son bağlantının üstüne binmesin */
+.alt-alt { padding-bottom: 72px; }
+@media (min-width: 992px) { .alt-alt .kap { padding-right: 64px; } .alt-alt { padding-bottom: 18px; } }
 
 .yukari {
     position: fixed; right: 16px; bottom: 16px; z-index: 30;
