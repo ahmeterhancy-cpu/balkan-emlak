@@ -9,6 +9,7 @@ use App\Models\User;
 use Database\Seeders\IcerikSeeder;
 use Database\Seeders\KonumSeeder;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 /**
  * cPanel deploy'unda her seferinde çalışır; SSH olmadan ilk kurulumu yapar.
@@ -46,8 +47,19 @@ class Kurulum extends Command
         $eposta = mb_strtolower(trim((string) config('app.ilk_yonetici.eposta')));
         $parola = (string) config('app.ilk_yonetici.parola');
 
-        if ($eposta === '' || mb_strlen($parola) < 12) {
-            $this->warn('İlk yönetici açılmadı: .env içine ILK_YONETICI_EPOSTA ve en az 12 karakterlik ILK_YONETICI_PAROLA yazın.');
+        if ($eposta === '') {
+            $this->warn('İlk yönetici açılmadı: .env içine ILK_YONETICI_EPOSTA yazın.');
+
+            return self::SUCCESS;
+        }
+
+        // Parola verilmediyse rastgele üretilir ve YALNIZ bu çıktıda (deploy günlüğü,
+        // web dışı) bir kez görünür; ilk girişte değiştirilmeli.
+        $uretildi = $parola === '';
+        if ($uretildi) {
+            $parola = Str::password(16, symbols: false);
+        } elseif (mb_strlen($parola) < 12) {
+            $this->warn('İlk yönetici açılmadı: ILK_YONETICI_PAROLA en az 12 karakter olmalı (ya da boş bırakın, üretilsin).');
 
             return self::SUCCESS;
         }
@@ -62,7 +74,12 @@ class Kurulum extends Command
         $yonetici->email_verified_at ??= now();
         $yonetici->save();
 
-        $this->info('İlk sistem yöneticisi açıldı ('.$eposta.'). Girişten sonra ILK_YONETICI_PAROLA satırını .env\'den silin.');
+        $this->info('İlk sistem yöneticisi açıldı ('.$eposta.').');
+        if ($uretildi) {
+            $this->line('Parola = '.$parola.'   (bir daha gösterilmez; ilk girişte değiştirin)');
+        } else {
+            $this->line('Girişten sonra ILK_YONETICI_PAROLA satırını .env dosyasından silin.');
+        }
 
         return self::SUCCESS;
     }

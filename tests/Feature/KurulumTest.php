@@ -40,11 +40,14 @@ class KurulumTest extends TestCase
         $this->assertSame(1, User::count());
     }
 
-    public function test_parola_kisa_ya_da_eksikse_yonetici_acilmaz(): void
+    public function test_parola_kisaysa_acilmaz_bossa_uretilip_bir_kez_yazilir(): void
     {
         config(['app.ilk_yonetici' => ['eposta' => 'a@b.example', 'parola' => 'kisa', 'ad' => 'X']]);
-
         $this->artisan('balkan:kurulum')->assertSuccessful();
         $this->assertSame(0, User::count());
+
+        config(['app.ilk_yonetici.parola' => '']);
+        $this->artisan('balkan:kurulum')->expectsOutputToContain('Parola = ')->assertSuccessful();
+        $this->assertSame(1, User::where('email', 'a@b.example')->count());
     }
 }

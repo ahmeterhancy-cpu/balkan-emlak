@@ -34,6 +34,8 @@ deployment:
     - chmod -R 775 $APPPATH/storage $APPPATH/bootstrap/cache >> $LOG 2>&1 || true
     - /bin/cp deploy/cpanel/app.htaccess $APPPATH/.htaccess >> $LOG 2>&1
     - echo $WEBROOT > $APPPATH/.public_yolu
+    - test -f $APPPATH/.env || /bin/cp .env.production.example $APPPATH/.env >> $LOG 2>&1
+    - cd $APPPATH && { grep -q "^APP_KEY=base64" .env || $PHPBIN artisan key:generate --force; } >> $LOG 2>&1
     - echo "--- 3/6 web koku ---" >> $LOG 2>&1
     - /bin/rm -rf $WEBROOT/build $WEBROOT/img >> $LOG 2>&1
     - /bin/cp -a public/build public/img $WEBROOT/ >> $LOG 2>&1
