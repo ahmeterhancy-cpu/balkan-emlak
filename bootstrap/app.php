@@ -7,7 +7,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-return Application::configure(basePath: dirname(__DIR__))
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
@@ -42,3 +42,16 @@ return Application::configure(basePath: dirname(__DIR__))
             return redirect()->to($y->hedefAdresi(), $y->kod);
         });
     })->create();
+
+/*
+ * cPanel yerleşimi: uygulama public_html/balkan_app içinde, web kökü
+ * public_html. Deploy web kökünün yolunu `.public_yolu` dosyasına yazar;
+ * böylece public_path() hem web isteğinde hem artisan/cron'da (yedek,
+ * görsel sürümleri, medya diski) gerçek web kökünü gösterir.
+ * Yerelde dosya yok, Laravel'in kendi public/ klasörü kullanılır.
+ */
+if (is_file($publicYolu = dirname(__DIR__).'/.public_yolu') && is_dir($kok = trim((string) file_get_contents($publicYolu)))) {
+    $app->usePublicPath($kok);
+}
+
+return $app;

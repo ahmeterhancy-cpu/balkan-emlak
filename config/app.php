@@ -105,6 +105,17 @@ return [
     'yedek_parola' => env('YEDEK_PAROLA'),
     'yedek_sakla' => (int) env('YEDEK_SAKLA', 14),
 
+    /*
+     * SSH olmayan sunucuda ilk sistem yöneticisi (php artisan balkan:kurulum,
+     * deploy'da otomatik). Yalnız hiç sistem yöneticisi yokken kullanılır;
+     * girişten sonra parola satırı .env'den silinmeli.
+     */
+    'ilk_yonetici' => [
+        'eposta' => env('ILK_YONETICI_EPOSTA'),
+        'parola' => env('ILK_YONETICI_PAROLA'),
+        'ad' => env('ILK_YONETICI_AD', 'Sistem Yöneticisi'),
+    ],
+
     'key' => env('APP_KEY'),
 
     'previous_keys' => [

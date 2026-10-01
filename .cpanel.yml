@@ -1,0 +1,53 @@
+# cPanel → Git Version Control → Manage → "Update from Remote" + "Deploy HEAD Commit".
+# Klonlamak dosyaları public_html'e KOYMAZ; taşıyan adım budur. Ayrıntı: DEPLOY.md
+#
+# YERLEŞİM (kök dizin değiştirilemeyen paket için):
+#   public_html/              ← web kökü (index.php, .htaccess, build/, img/, medya/)
+#   public_html/balkan_app/   ← Laravel'in tamamı + .env  (balkan_app/.htaccess = web'e kapalı)
+# public_path() deploy'un yazdığı balkan_app/.public_yolu ile web kökünü gösterir.
+#
+# KURALLAR (Ay Parçası'nda canlıda öğrenildi):
+#  - Her görev TEK SATIR.
+#  - Görev metinlerinde "iki nokta + boşluk" YOK; YAML geçersiz olur, cPanel deploy'u
+#    sessizce düşürür ve "Last Deployed" eski commit'te donar. Metinlerde "=" kullanın.
+#  - Mutlak yol (/bin/cp ...); rsync / tar yok, joker ve boru yok.
+#  - .env, storage/, public_html/medya (yüklenen fotoğraflar) KOPYALANMAZ, SİLİNMEZ.
+#  - migrate:fresh / db:seed YOK. İlk kurulum balkan:kurulum ile (tekrar çalışması güvenli).
+#  - Günlük: ~/deploy-balkan.log  (cPanel hata göstermez; Dosya Yöneticisi'nden bakın)
+deployment:
+  tasks:
+    - export WEBROOT=/home/KULLANICI/public_html
+    - export APPPATH=/home/KULLANICI/public_html/balkan_app
+    - export LOG=/home/KULLANICI/deploy-balkan.log
+    - export PHPBIN=$(command -v php || echo /opt/cpanel/ea-php83/root/usr/bin/php)
+    - date > $LOG 2>&1
+    - echo "PHPBIN=$PHPBIN APPPATH=$APPPATH WEBROOT=$WEBROOT" >> $LOG 2>&1
+    - $PHPBIN -v >> $LOG 2>&1 || true
+    - echo "--- 1/6 uygulama dosyalari ---" >> $LOG 2>&1
+    - /bin/mkdir -p $APPPATH >> $LOG 2>&1
+    - /bin/rm -rf $APPPATH/app $APPPATH/bootstrap/app.php $APPPATH/bootstrap/providers.php $APPPATH/config $APPPATH/database $APPPATH/deploy $APPPATH/public $APPPATH/resources $APPPATH/routes $APPPATH/vendor >> $LOG 2>&1
+    - /bin/cp -a app artisan bootstrap composer.json composer.lock config database deploy public resources routes $APPPATH/ >> $LOG 2>&1
+    - /bin/cp .env.production.example $APPPATH/.env.production.example >> $LOG 2>&1
+    - test -d vendor && /bin/cp -a vendor $APPPATH/ >> $LOG 2>&1 || echo "VENDOR DEPODA YOK" >> $LOG 2>&1
+    - echo "--- 2/6 storage iskeleti ve web kapisi ---" >> $LOG 2>&1
+    - /bin/mkdir -p $APPPATH/storage/framework/cache/data $APPPATH/storage/framework/sessions $APPPATH/storage/framework/views $APPPATH/storage/logs $APPPATH/storage/app/private $APPPATH/storage/app/yedekler $APPPATH/bootstrap/cache >> $LOG 2>&1
+    - chmod -R 775 $APPPATH/storage $APPPATH/bootstrap/cache >> $LOG 2>&1 || true
+    - /bin/cp deploy/cpanel/app.htaccess $APPPATH/.htaccess >> $LOG 2>&1
+    - echo $WEBROOT > $APPPATH/.public_yolu
+    - echo "--- 3/6 web koku ---" >> $LOG 2>&1
+    - /bin/rm -rf $WEBROOT/build $WEBROOT/img >> $LOG 2>&1
+    - /bin/cp -a public/build public/img $WEBROOT/ >> $LOG 2>&1
+    - /bin/cp -a public/favicon.ico public/favicon.svg $WEBROOT/ >> $LOG 2>&1 || true
+    - /bin/cp deploy/cpanel/index.php $WEBROOT/index.php >> $LOG 2>&1
+    - /bin/cp public/.htaccess $WEBROOT/.htaccess >> $LOG 2>&1
+    - /bin/mkdir -p $WEBROOT/medya >> $LOG 2>&1
+    - echo "--- 4/6 gocler ---" >> $LOG 2>&1
+    - cd $APPPATH && $PHPBIN artisan optimize:clear >> $LOG 2>&1 || true
+    - cd $APPPATH && $PHPBIN artisan migrate --force >> $LOG 2>&1 || echo "MIGRATE BASARISIZ - .env ve veritabani bilgilerine bakin" >> $LOG 2>&1
+    - echo "--- 5/6 ilk kurulum (icerik iskeleti, ilk yonetici) ---" >> $LOG 2>&1
+    - cd $APPPATH && $PHPBIN artisan balkan:kurulum >> $LOG 2>&1 || true
+    - echo "--- 6/6 panel varliklari ve onbellek ---" >> $LOG 2>&1
+    - cd $APPPATH && $PHPBIN artisan filament:assets >> $LOG 2>&1 || true
+    - cd $APPPATH && $PHPBIN artisan optimize >> $LOG 2>&1 || true
+    - cd $APPPATH && $PHPBIN artisan filament:optimize >> $LOG 2>&1 || true
+    - echo "=== DEPLOY BITTI ===" >> $LOG 2>&1

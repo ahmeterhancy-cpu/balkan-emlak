@@ -1,0 +1,25 @@
+# public_html/balkan_app/.htaccess
+#
+# Uygulama public_html'in İÇİNDE duruyor (paket kök dizin değiştirmeye
+# izin vermiyor). Bu dosya olmazsa .env, vendor/ ve tüm kaynak kod
+# tarayıcıdan okunabilir. Deploy her seferinde bu dosyayı yeniden koyar.
+#
+# Kurulumdan sonra doğrulayın — 403 dönmeli:
+#   https://ALANADI/balkan_app/.env
+#
+# BİLEREK SADE: daha önce burada php_flag ve -ExecCGI de vardı. LiteSpeed
+# bunları desteklemeyip 500 üretebiliyor, o da "kapalı mı yoksa bozuk mu"
+# ayrımını imkânsız hale getiriyordu. Erişimi kapatmak için Require yeter.
+
+<IfModule mod_authz_core.c>
+    # Apache 2.4 / LiteSpeed
+    Require all denied
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    # Apache 2.2
+    Order allow,deny
+    Deny from all
+</IfModule>
+
+Options -Indexes
