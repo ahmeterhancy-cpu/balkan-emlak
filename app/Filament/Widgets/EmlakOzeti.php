@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Gate;
 /** Emlak özet kartları; danışman için yalnız kendi kayıtları sayılır. */
 class EmlakOzeti extends StatsOverviewWidget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 10;
 
     protected int|string|array $columnSpan = 'full';
 

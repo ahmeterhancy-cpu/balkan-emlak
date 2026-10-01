@@ -21,7 +21,7 @@ class SiteOperasyonOzeti extends StatsOverviewWidget
 {
     use InteractsWithPageFilters, SiteGostergeSuzgeci;
 
-    protected static ?int $sort = 11;
+    protected static ?int $sort = 2;
 
     protected int|string|array $columnSpan = 'full';
 

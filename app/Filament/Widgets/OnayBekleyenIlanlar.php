@@ -15,7 +15,7 @@ use Filament\Widgets\TableWidget;
 /** İncelemeye gönderilmiş ilanlar; yalnız yayın yetkisi olanlara. */
 class OnayBekleyenIlanlar extends TableWidget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 12;
 
     protected static ?string $heading = 'Onay bekleyen ilanlar';
 

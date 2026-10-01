@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Gate;
 /** İçerik editörünün gösterge paneli: emlak verisi yok, yalnız web içerikleri. */
 class IcerikOzeti extends StatsOverviewWidget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 10;
 
     protected int|string|array $columnSpan = 'full';
 

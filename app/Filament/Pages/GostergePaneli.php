@@ -45,7 +45,7 @@ class GostergePaneli extends Dashboard
     {
         return $schema->components([
             Section::make('Site yönetimi göstergeleri')
-                ->description('Tahsilat oranı = seçili dönem tahakkuklarına dağıtılmış tahsilat / seçili dönem tahakkuk toplamı. Tutarlar para birimine göre ayrıdır; şirket komisyon gelirleri dahil değildir.')
+                ->description('Hemen alttaki site finansı ve operasyon kartları burada seçtiğiniz site ve aya göre hesaplanır.')
                 ->visible(fn () => static::siteGostergeleri())
                 ->columns(3)
                 ->columnSpanFull()

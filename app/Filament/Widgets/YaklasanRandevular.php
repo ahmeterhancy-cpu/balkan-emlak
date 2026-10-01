@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Gate;
 
 class YaklasanRandevular extends TableWidget
 {
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 11;
 
     protected static ?string $heading = 'Yaklaşan randevular';
 

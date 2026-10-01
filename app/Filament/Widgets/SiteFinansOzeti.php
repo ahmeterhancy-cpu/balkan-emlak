@@ -26,7 +26,7 @@ class SiteFinansOzeti extends StatsOverviewWidget
 {
     use InteractsWithPageFilters, SiteGostergeSuzgeci;
 
-    protected static ?int $sort = 10;
+    protected static ?int $sort = 1;
 
     protected int|string|array $columnSpan = 'full';
 

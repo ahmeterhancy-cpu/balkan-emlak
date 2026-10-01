@@ -19,7 +19,7 @@ class OnayBekleyenGiderler extends TableWidget
 {
     use InteractsWithPageFilters, SiteGostergeSuzgeci;
 
-    protected static ?int $sort = 12;
+    protected static ?int $sort = 3;
 
     protected static ?string $heading = 'Onay bekleyen giderler';
 
