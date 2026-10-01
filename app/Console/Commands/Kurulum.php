@@ -22,6 +22,9 @@ use Illuminate\Support\Str;
  */
 class Kurulum extends Command
 {
+    /** Panelin parola kuralıyla aynı alt sınır. */
+    private const EN_AZ = 8;
+
     protected $signature = 'balkan:kurulum';
 
     protected $description = 'Canlı ilk kurulum: temel içerik ve ilk yönetici (tekrar çalıştırmak güvenli)';
@@ -56,8 +59,8 @@ class Kurulum extends Command
         $uretildi = $parola === '';
         if ($uretildi) {
             $parola = Str::password(16, symbols: false);
-        } elseif (mb_strlen($parola) < 12) {
-            $this->warn('İlk yönetici açılmadı: ILK_YONETICI_PAROLA en az 12 karakter olmalı (ya da boş bırakın, üretilsin).');
+        } elseif (mb_strlen($parola) < self::EN_AZ) {
+            $this->warn('İlk yönetici açılmadı: ILK_YONETICI_PAROLA en az 8 karakter olmalı (ya da boş bırakın, üretilsin).');
 
             return self::SUCCESS;
         }
@@ -84,7 +87,7 @@ class Kurulum extends Command
 
     /**
      * SSH yokken parola kurtarma: .env'de YONETICI_PAROLA_SIFIRLA=true ve
-     * ILK_YONETICI_PAROLA (kullanıcının kendi seçtiği, ≥12 karakter) varsa
+     * ILK_YONETICI_PAROLA (kullanıcının kendi seçtiği, ≥8 karakter) varsa
      * ILK_YONETICI_EPOSTA'daki sistem yöneticisinin parolası buna ayarlanır.
      * Parola hiçbir yere yazılmaz. İki satır silinene kadar her deploy uyarır.
      */
@@ -98,8 +101,8 @@ class Kurulum extends Command
 
         $yonetici = User::where('email', $eposta)->where('rol', Rol::SistemYoneticisi->value)->first();
 
-        if (! $yonetici || mb_strlen($parola) < 12) {
-            $this->warn('Parola sıfırlanmadı: ILK_YONETICI_EPOSTA bir sistem yöneticisi olmalı ve ILK_YONETICI_PAROLA en az 12 karakter.');
+        if (! $yonetici || mb_strlen($parola) < self::EN_AZ) {
+            $this->warn('Parola sıfırlanmadı: ILK_YONETICI_EPOSTA bir sistem yöneticisi olmalı ve ILK_YONETICI_PAROLA en az 8 karakter.');
 
             return self::SUCCESS;
         }
