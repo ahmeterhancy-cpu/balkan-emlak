@@ -114,6 +114,8 @@ return [
         'eposta' => env('ILK_YONETICI_EPOSTA'),
         'parola' => env('ILK_YONETICI_PAROLA'),
         'ad' => env('ILK_YONETICI_AD', 'Sistem Yöneticisi'),
+        // Parola kurtarma (SSH yok): true + ILK_YONETICI_PAROLA → o yöneticinin parolası ayarlanır
+        'sifirla' => (bool) env('YONETICI_PAROLA_SIFIRLA', false),
     ],
 
     'key' => env('APP_KEY'),

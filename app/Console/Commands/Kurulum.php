@@ -38,14 +38,12 @@ class Kurulum extends Command
             $this->line('İçerik iskeleti eklendi.');
         }
 
-        if (User::where('rol', Rol::SistemYoneticisi->value)->exists()) {
-            $this->line('Sistem yöneticisi zaten var; dokunulmadı.');
-
-            return self::SUCCESS;
-        }
-
         $eposta = mb_strtolower(trim((string) config('app.ilk_yonetici.eposta')));
         $parola = (string) config('app.ilk_yonetici.parola');
+
+        if (User::where('rol', Rol::SistemYoneticisi->value)->exists()) {
+            return $this->parolaSifirla($eposta, $parola);
+        }
 
         if ($eposta === '') {
             $this->warn('İlk yönetici açılmadı: .env içine ILK_YONETICI_EPOSTA yazın.');
@@ -80,6 +78,35 @@ class Kurulum extends Command
         } else {
             $this->line('Girişten sonra ILK_YONETICI_PAROLA satırını .env dosyasından silin.');
         }
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * SSH yokken parola kurtarma: .env'de YONETICI_PAROLA_SIFIRLA=true ve
+     * ILK_YONETICI_PAROLA (kullanıcının kendi seçtiği, ≥12 karakter) varsa
+     * ILK_YONETICI_EPOSTA'daki sistem yöneticisinin parolası buna ayarlanır.
+     * Parola hiçbir yere yazılmaz. İki satır silinene kadar her deploy uyarır.
+     */
+    private function parolaSifirla(string $eposta, string $parola): int
+    {
+        if (! config('app.ilk_yonetici.sifirla')) {
+            $this->line('Sistem yöneticisi zaten var; dokunulmadı.');
+
+            return self::SUCCESS;
+        }
+
+        $yonetici = User::where('email', $eposta)->where('rol', Rol::SistemYoneticisi->value)->first();
+
+        if (! $yonetici || mb_strlen($parola) < 12) {
+            $this->warn('Parola sıfırlanmadı: ILK_YONETICI_EPOSTA bir sistem yöneticisi olmalı ve ILK_YONETICI_PAROLA en az 12 karakter.');
+
+            return self::SUCCESS;
+        }
+
+        $yonetici->forceFill(['password' => $parola, 'aktif' => true])->save();
+        $this->info('Yönetici parolası .env\'deki değere ayarlandı ('.$eposta.').');
+        $this->warn('ŞİMDİ .env\'den YONETICI_PAROLA_SIFIRLA ve ILK_YONETICI_PAROLA satırlarını silin; yoksa her deploy parolayı yeniden bu değere çeker.');
 
         return self::SUCCESS;
     }

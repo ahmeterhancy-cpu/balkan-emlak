@@ -40,6 +40,24 @@ class KurulumTest extends TestCase
         $this->assertSame(1, User::count());
     }
 
+    public function test_parola_kurtarma_yalniz_bayrakla_ve_yalniz_sistem_yoneticisinde(): void
+    {
+        config(['app.ilk_yonetici' => ['eposta' => 'patron@balkan.example', 'parola' => '', 'ad' => 'Patron', 'sifirla' => false]]);
+        $this->artisan('balkan:kurulum')->assertSuccessful();
+        $y = User::where('email', 'patron@balkan.example')->firstOrFail();
+        $eski = $y->password;
+
+        // Bayrak yokken .env'deki parola yöneticiye dokunmaz
+        config(['app.ilk_yonetici.parola' => 'kendi-sectigim-parola']);
+        $this->artisan('balkan:kurulum')->assertSuccessful();
+        $this->assertSame($eski, $y->fresh()->password);
+
+        config(['app.ilk_yonetici.sifirla' => true]);
+        $this->artisan('balkan:kurulum')->expectsOutputToContain('satırlarını silin')->assertSuccessful();
+        $this->assertTrue(Hash::check('kendi-sectigim-parola', $y->fresh()->password));
+        $this->artisan('balkan:kurulum')->doesntExpectOutputToContain('kendi-sectigim-parola')->assertSuccessful();
+    }
+
     public function test_parola_kisaysa_acilmaz_bossa_uretilip_bir_kez_yazilir(): void
     {
         config(['app.ilk_yonetici' => ['eposta' => 'a@b.example', 'parola' => 'kisa', 'ad' => 'X']]);

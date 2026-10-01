@@ -13,13 +13,14 @@
 #  - Mutlak yol (/bin/cp ...); rsync / tar yok, joker ve boru yok.
 #  - .env, storage/, public_html/medya (yüklenen fotoğraflar) KOPYALANMAZ, SİLİNMEZ.
 #  - migrate:fresh / db:seed YOK. İlk kurulum balkan:kurulum ile (tekrar çalışması güvenli).
-#  - Günlük: ~/deploy-balkan.log  (cPanel hata göstermez; Dosya Yöneticisi'nden bakın)
+#  - Günlük: ~/deploy-balkan.log, bir önceki ~/deploy-balkan.log.onceki  (cPanel hata göstermez)
 deployment:
   tasks:
     - export WEBROOT=/home/balk1576/public_html
     - export APPPATH=/home/balk1576/public_html/balkan_app
     - export LOG=/home/balk1576/deploy-balkan.log
     - export PHPBIN=$(command -v php || echo /opt/cpanel/ea-php83/root/usr/bin/php)
+    - test -f $LOG && /bin/cp -f $LOG $LOG.onceki || true
     - date > $LOG 2>&1
     - echo "PHPBIN=$PHPBIN APPPATH=$APPPATH WEBROOT=$WEBROOT" >> $LOG 2>&1
     - $PHPBIN -v >> $LOG 2>&1 || true
