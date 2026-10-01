@@ -5,6 +5,15 @@
 
     RewriteEngine On
 
+    # Canlı alan adı: tek adres https://balkansiteyonetimi.com (http ve www → 301).
+    # Yalnız bu alan adında çalışır; yerel geliştirmeye dokunmaz. Sertifika
+    # yenilemesi (.well-known) yönlendirilmez.
+    RewriteCond %{REQUEST_URI} !^/\.well-known/
+    RewriteCond %{HTTP_HOST} ^(www\.)?balkansiteyonetimi\.com$ [NC]
+    RewriteCond %{HTTPS} !=on [OR]
+    RewriteCond %{HTTP_HOST} ^www\. [NC]
+    RewriteRule ^ https://balkansiteyonetimi.com%{REQUEST_URI} [L,R=301,NE]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
