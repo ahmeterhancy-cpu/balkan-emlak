@@ -12,6 +12,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Auth\Pages\Login;
 use Filament\View\PanelsRenderHook;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\HtmlString;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -29,6 +30,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // Gösterge bileşenlerinin stili (Filament temasına dokunmadan, "bp-" önekli)
+            ->renderHook(PanelsRenderHook::HEAD_END, fn () => new HtmlString(Vite::withEntryPoints(['resources/css/panel.css'])->toHtml()))
             // Giriş sayfası: solda marka alanı, formun altında siteye dönüş bağlantısı
             ->renderHook(PanelsRenderHook::SIMPLE_LAYOUT_START, fn () => view('filament.giris-yan'), scopes: Login::class)
             ->renderHook(PanelsRenderHook::AUTH_LOGIN_FORM_AFTER, fn () => new HtmlString(

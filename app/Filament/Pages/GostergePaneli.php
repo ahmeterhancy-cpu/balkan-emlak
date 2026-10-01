@@ -6,7 +6,6 @@ use App\Filament\Destek\SiteAlanlari;
 use App\Support\Donem;
 use App\Support\Yetki;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Pages\Dashboard;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Filament\Schemas\Components\Section;
@@ -41,26 +40,42 @@ class GostergePaneli extends Dashboard
             && SiteAlanlari::siteler() !== [];
     }
 
+    /** Gelecek ay + son 24 ay, yeniden eskiye. @return array<string, string> */
+    public static function donemSecenekleri(): array
+    {
+        $secenekler = [];
+        $ay = now()->startOfMonth()->addMonth();
+        for ($i = 0; $i < 26; $i++, $ay->subMonth()) {
+            $secenekler[$ay->format('Y-m')] = Donem::ad($ay->format('Y-m'));
+        }
+
+        return $secenekler;
+    }
+
     public function filtersForm(Schema $schema): Schema
     {
         return $schema->components([
-            Section::make('Site yönetimi göstergeleri')
-                ->description('Hemen alttaki site finansı ve operasyon kartları burada seçtiğiniz site ve aya göre hesaplanır.')
+            // İnce süzgeç çubuğu: alttaki site kartları bu seçime göre hesaplanır
+            Section::make()
+                ->compact()
+                ->extraAttributes(['class' => 'bp-suzgec'])
                 ->visible(fn () => static::siteGostergeleri())
-                ->columns(3)
+                ->columns(['default' => 1, 'md' => 4])
                 ->columnSpanFull()
                 ->schema([
                     Select::make('site_id')
                         ->label('Site')
+                        ->prefixIcon('heroicon-o-building-office-2')
                         ->options(fn () => SiteAlanlari::siteler())
                         ->placeholder('Tüm yetkili siteler')
-                        ->default(fn () => SiteAlanlari::tekSiteId()),
-                    TextInput::make('donem')
-                        ->label('Dönem (YYYY-AA)')
-                        ->placeholder(now()->format('Y-m'))
-                        ->regex('/^\d{4}-(0[1-9]|1[0-2])$/')
-                        ->live(onBlur: true)
-                        ->helperText(fn ($state) => Donem::gecerli((string) $state) ? Donem::ad($state) : Donem::ad(now()->format('Y-m'))),
+                        ->default(fn () => SiteAlanlari::tekSiteId())
+                        ->columnSpan(['md' => 2]),
+                    Select::make('donem')
+                        ->label('Dönem')
+                        ->prefixIcon('heroicon-o-calendar')
+                        ->options(fn () => static::donemSecenekleri())
+                        ->placeholder('Bu ay ('.Donem::ad(now()->format('Y-m')).')')
+                        ->columnSpan(['md' => 1]),
                 ]),
         ]);
     }

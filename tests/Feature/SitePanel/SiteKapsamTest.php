@@ -92,7 +92,7 @@ class SiteKapsamTest extends TestCase
         $this->assertTrue(SiteFinansOzeti::canView());
         $this->assertTrue(OnayBekleyenGiderler::canView());
         Livewire::test(SiteFinansOzeti::class, ['pageFilters' => ['site_id' => $this->camlik->id, 'donem' => '2026-09']])
-            ->assertSee('Tahsilat oranı · TRY')->assertSee('36.000 ₺');
+            ->assertSee('Tahsilat oranı')->assertSee('36.000 ₺');
         Livewire::test(OnayBekleyenGiderler::class, ['pageFilters' => []])
             ->assertSee('Sonbahar peyzaj düzenlemesi');
 

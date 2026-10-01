@@ -17,7 +17,7 @@ class YaklasanBakimlar extends TableWidget
 {
     use InteractsWithPageFilters, SiteGostergeSuzgeci;
 
-    protected static ?int $sort = 4;
+    protected static ?int $sort = 5;
 
     protected static ?string $heading = 'Yaklaşan ve geciken bakımlar (14 gün)';
 

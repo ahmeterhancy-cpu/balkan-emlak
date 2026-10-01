@@ -13,60 +13,58 @@ use App\Models\IsEmri;
 use App\Services\SiteFinans\GiderServisi;
 use App\Support\Yetki;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use Filament\Widgets\StatsOverviewWidget;
-use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Widgets\Widget;
 
-/** Açık arızalar, 14 gün içindeki bakımlar ve onay bekleyen giderler. */
-class SiteOperasyonOzeti extends StatsOverviewWidget
+/** Açık arızalar, 14 gün içindeki bakımlar ve onay bekleyen giderler; dikkat isteyenler vurgulanır. */
+class SiteOperasyonOzeti extends Widget
 {
     use InteractsWithPageFilters, SiteGostergeSuzgeci;
 
-    protected static ?int $sort = 2;
+    /** Sayfanın üstünde: tembel yüklemede boş kutu görünmesin. */
+    protected static bool $isLazy = false;
 
-    protected int|string|array $columnSpan = 'full';
+    protected static ?int $sort = 3;
 
-    protected ?string $pollingInterval = null;
+    protected string $view = 'filament.widgets.site-operasyon-ozeti';
 
     public static function canView(): bool
     {
         return GostergePaneli::siteGostergeleri() && (Yetki::var('operasyon.yonet') || Yetki::var('finans.goruntule'));
     }
 
-    protected function getHeading(): ?string
-    {
-        return 'Site operasyonu — '.$this->siteEtiketi();
-    }
-
-    protected function getStats(): array
+    protected function getViewData(): array
     {
         $idler = $this->siteIdleri();
-        $kartlar = [];
+        $satirlar = [];
 
         if (Yetki::var('operasyon.yonet')) {
             $acik = IsEmri::whereIn('site_id', $idler)->whereNotIn('durum', ['tamamlandi', 'kapatildi']);
-            $kartlar[] = Stat::make('Açık arıza / iş emri', (clone $acik)->count())
-                ->description((clone $acik)->whereIn('oncelik', ['acil', 'yuksek'])->count().' acil / yüksek öncelikli')
-                ->icon('heroicon-o-wrench-screwdriver')
-                ->color('warning')
-                ->url(IsEmriResource::getUrl('index'));
+            $acil = (clone $acik)->whereIn('oncelik', ['acil', 'yuksek'])->count();
+            $satirlar[] = [
+                'etiket' => 'Açık arıza / iş emri', 'sayi' => (clone $acik)->count(),
+                'alt' => $acil ? $acil.' acil / yüksek öncelikli' : 'Acil iş yok',
+                'uyari' => $acil > 0, 'simge' => 'heroicon-o-wrench-screwdriver', 'url' => IsEmriResource::getUrl('index'),
+            ];
 
             $bakim = BakimPlani::whereIn('site_id', $idler)->where('aktif', true)->where('sonraki_bakim', '<=', now()->addDays(14)->toDateString());
-            $kartlar[] = Stat::make('14 gün içindeki bakımlar', (clone $bakim)->count())
-                ->description((clone $bakim)->where('sonraki_bakim', '<', now()->toDateString())->count().' tanesi gecikmiş')
-                ->icon('heroicon-o-calendar-days')
-                ->url(BakimPlaniResource::getUrl('index'));
+            $geciken = (clone $bakim)->where('sonraki_bakim', '<', now()->toDateString())->count();
+            $satirlar[] = [
+                'etiket' => '14 gün içindeki bakımlar', 'sayi' => (clone $bakim)->count(),
+                'alt' => $geciken ? $geciken.' tanesi gecikmiş' : 'Geciken bakım yok',
+                'uyari' => $geciken > 0, 'simge' => 'heroicon-o-calendar-days', 'url' => BakimPlaniResource::getUrl('index'),
+            ];
         }
 
         if (Yetki::var('finans.goruntule')) {
             $bekleyen = Gider::whereIn('site_id', $idler)->where('onay_durumu', 'onay_bekliyor')->with('site')->get();
             $limitUstu = $bekleyen->filter(fn (Gider $g) => app(GiderServisi::class)->limitAsiliyorMu($g))->count();
-            $kartlar[] = Stat::make('Onay bekleyen gider', $bekleyen->count())
-                ->description($limitUstu ? $limitUstu.' tanesi site onay limitini aşıyor; şirket yöneticisi onayı gerekir' : 'Limit aşan yok')
-                ->icon('heroicon-o-clipboard-document-check')
-                ->color($limitUstu ? 'danger' : 'gray')
-                ->url(GiderResource::getUrl('index'));
+            $satirlar[] = [
+                'etiket' => 'Onay bekleyen gider', 'sayi' => $bekleyen->count(),
+                'alt' => $limitUstu ? $limitUstu.' tanesi site onay limitini aşıyor; şirket yöneticisi onayı gerekir' : 'Limit aşan yok',
+                'uyari' => $limitUstu > 0, 'simge' => 'heroicon-o-clipboard-document-check', 'url' => GiderResource::getUrl('index'),
+            ];
         }
 
-        return $kartlar;
+        return ['satirlar' => $satirlar, 'baslik' => $this->siteEtiketi()];
     }
 }
